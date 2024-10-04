@@ -15,33 +15,44 @@
                 <div class="card mb-4">
 
                     <x-datatable.card-header :icon="'staff'" :title="'Staff Attendance'" :export_url="'attendance_export'">
-                        @can(\App\Enums\PermissionsEnum::CREATESTAFF->value)
+                        @can(\App\Enums\PermissionsEnum::STAFFATTENDANCE->value)
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Upload Attendance" data-bs-url="form_create/createAttendance" data-bs-size=""> <i class="bi bi-upload"></i> Upload Attendance</button>
                         @endcan
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($attendances->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0 mb-3">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
-                            'Staff ID',
-                            'Staff Name',
+                            'Month',
+                            'Year',
                             'Date',
-                            'Arrival',
-                            'Departure',
-                            ['name' => 'Action', 'width' => '6%', 'classes' => 'no-sort']
+                            'Unit',
+                            'Created By',
+                            ['name' => 'Action', 'width' => '15%', 'classes' => 'no-sort']
                         ]">
 
                             @forelse ($attendances as $key => $attendance)
                                 <tr class="align-middle">
                                     <td>{{ ++$key }}</td>
-                                    <td>{{ $attendance->staff_number }}</td>
-                                    <td>{{ $attendance->staff }}</td>
-                                    <td>{{ $attendance->attendance_date }}</td>
-                                    <td>{{ getDateFormat($attendance->checkin_time) }}</td>
-                                    <td>{{ getDateFormat($attendance->departure_time) }}</td>
+                                    <td>{{ $attendance->month }}</td>
+                                    <td>{{ $attendance->year }}</td>
+                                    <td>{{ $attendance->created_at }}</td>
+{{--                                    <td>{{ getDateFormat($attendance->checkin_time) }}</td>--}}
+                                    <td>{{ $attendance->division_name }}</td>
+                                    <td>{{ get_logged_staff_name($attendance->updatedBy->staff_id) }}</td>
                                     <td>
-                                        @can(\App\Enums\PermissionsEnum::DELETESTAFF->value)
-                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Staff Deletion" data-bs-url="form_delete/deleteStaff/{{ $attendance->attendancef_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
+                                        @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
+{{--                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="" data-bs-url="form_view/viewAttendance/{{ $attendance->id }}" data-bs-size="modal-xl"> Receipt</button>--}}
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="View Attendance - {{ $attendance->month }} {{ $attendance->year }}" data-bs-url="form_view/viewAttendance/{{ $attendance->attendance_id }}" data-bs-size="modal-xl"> View Attendance</button>
+                                        @endcan
+                                        @can(\App\Enums\PermissionsEnum::DELETEATTENDANCE->value)
+                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Attendance Deletion" data-bs-url="form_delete/deleteAttendance/{{ $attendance->attendance_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
                                         @endcan
                                     </td>
                                 </tr>

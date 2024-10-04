@@ -30,10 +30,12 @@
                                     <p>Staff</p>
                                 </a>
                             </li>
-                            <li class="nav-item"> <a href="{{ route('attendance') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Attendance</p>
-                                </a>
-                            </li>
+                            @can(\App\Enums\PermissionsEnum::STAFFATTENDANCE->value)
+                                <li class="nav-item"> <a href="{{ route('attendance') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                                        <p>Attendance</p>
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endif

@@ -56,6 +56,54 @@
                 </div> <!--end::Col-->
             </div> <!--end::Row-->
 
+            <h5 class="mt-4 mb-2">Info Box With <code>bg-*</code></h5> <!--begin::Row-->
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box text-bg-primary"> <span class="info-box-icon"> <i class="bi bi-bookmark-fill"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Bookmarks</span> <span class="info-box-number">41,410</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 70%"></div>
+                            </div> <span class="progress-description">
+                                        70% Increase in 30 Days
+                                    </span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box text-bg-success"> <span class="info-box-icon"> <i class="bi bi-hand-thumbs-up"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Likes</span> <span class="info-box-number">41,410</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 70%"></div>
+                            </div> <span class="progress-description">
+                                        70% Increase in 30 Days
+                                    </span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box text-bg-warning"> <span class="info-box-icon"> <i class="bi bi-calendar3"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Events</span> <span class="info-box-number">41,410</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 70%"></div>
+                            </div> <span class="progress-description">
+                                        70% Increase in 30 Days
+                                    </span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box text-bg-danger"> <span class="info-box-icon"> <i class="bi bi-chat-text-fill"></i> </span>
+                        <div class="info-box-content"> <span class="info-box-text">Comments</span> <span class="info-box-number">41,410</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 70%"></div>
+                            </div> <span class="progress-description">
+                                        70% Increase in 30 Days
+                                    </span>
+                        </div> <!-- /.info-box-content -->
+                    </div> <!-- /.info-box -->
+                </div> <!-- /.col -->
+            </div> <!--end::Row--> <!-- =========================================================== -->
+
         </div> <!--end::Container-->
     </div> <!--end::App Content-->
 

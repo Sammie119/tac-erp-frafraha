@@ -42,10 +42,10 @@ Route::middleware('auth')->group(function () {
             // Route::post('system_lovs_store', 'store');
         });
         Route::controller(StaffAttendanceController::class)->group(function () {
-            Route::get('attendance', 'index')->name('attendance')->middleware('permission:'.PermissionsEnum::VIEWSTAFF->value);
-            Route::post('attendance_store', 'store')->middleware('permission:'.PermissionsEnum::CREATESTAFF->value);
-            Route::get('attendance_export', 'export')->middleware('permission:'.PermissionsEnum::UPDATESTAFF->value);
-            Route::post('delete_attendance', 'destroy')->middleware('permission:'.PermissionsEnum::DELETESTAFF->value);
+            Route::get('attendance', 'index')->name('attendance')->middleware('permission:'.PermissionsEnum::STAFFATTENDANCE->value);
+            Route::post('attendance_store', 'store')->middleware('permission:'.PermissionsEnum::STAFFATTENDANCE->value);
+            Route::get('attendance_export', 'export')->middleware('permission:'.PermissionsEnum::STAFFATTENDANCE->value);
+            Route::post('delete_attendance', 'destroy')->middleware('permission:'.PermissionsEnum::DELETEATTENDANCE->value);
         });
     });
 

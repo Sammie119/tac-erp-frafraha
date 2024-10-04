@@ -16,6 +16,8 @@ enum PermissionsEnum: string
     case UPDATESTAFF = 'Update Staff';
     case VIEWSTAFF = 'View Staff';
     case DELETESTAFF = 'Delete Staff';
+    case STAFFATTENDANCE = 'Staff Attendance';
+    case DELETEATTENDANCE = 'Delete Attendance';
 
     //Product Permissions
     case CREATEPRODUCT = 'Create Products';

@@ -19,8 +19,14 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Add New Role" data-bs-url="form_create/createRole" data-bs-size="modal-lg"> <i class="bi bi-plus-lg"></i> Add Role</button>
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($roles->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0 mb-3">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Name',
                             'Permissions',
@@ -63,7 +69,4 @@
     <x-call-modal />
 
 @endsection
-
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_users'" />
 

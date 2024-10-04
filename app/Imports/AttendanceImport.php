@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\StaffAttendance;
+use App\Models\StaffAttendanceDetail;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -15,14 +15,17 @@ class AttendanceImport implements ToModel,WithHeadingRow, WithValidation
     * @return \Illuminate\Database\Eloquent\Model|null
     */
 
-    private function dateConvertor(int $date): string
+    private function dateConvertor($date): string
     {
-        return date("Y-m-d H:i:s", $date);
-}
+        if(is_int($date)){
+            return date("Y-m-d H:i:s", $date);
+        }
+        return $date;
+    }
 
     public function model(array $row)
     {
-        return new StaffAttendance([
+        return new StaffAttendanceDetail([
             'staff_number' => $row['staff_number'],
             'attendance_date' => $this->dateConvertor($row['attendance_date']),
             'checkin_time' => $this->dateConvertor($row['checkin_time']),

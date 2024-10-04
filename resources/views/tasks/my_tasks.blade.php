@@ -43,6 +43,3 @@
 
 @endsection
 
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_tasks'" />
-

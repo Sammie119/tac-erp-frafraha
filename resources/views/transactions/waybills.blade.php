@@ -18,8 +18,14 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Waybills" data-bs-url="form_create/createWaybill" data-bs-size="modal-xl"> <i class="bi bi-plus-lg"></i> New Waybill</button>
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($waybills->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0 mb-3">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Customer',
                             'Job',
@@ -63,7 +69,4 @@
     <x-ajax-call-input-fields :ajax_url="'get_search_product'" :form="'transactions.ajax_form.waybill_form'" />
 
 @endsection
-
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_waybills'" />
 

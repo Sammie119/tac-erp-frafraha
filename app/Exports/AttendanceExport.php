@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\StaffAttendance;
+use App\Models\StaffAttendanceDetail;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -15,7 +15,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithStyles
     */
     public function collection()
     {
-        return StaffAttendance::select('staff_number', 'attendance_date', 'checkin_time', 'departure_time')->limit(1)->get();
+        return StaffAttendanceDetail::select('staff_number', 'attendance_date', 'checkin_time', 'departure_time')->limit(1)->get();
 //        return User::select("id", "name", "email")->get();
     }
 

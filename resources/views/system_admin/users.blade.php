@@ -20,8 +20,14 @@
                         @endcan
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($users->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Name',
                             'Email',
@@ -63,7 +69,4 @@
     <x-call-modal />
 
 @endsection
-
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_users'" />
 

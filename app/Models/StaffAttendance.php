@@ -14,17 +14,21 @@ class StaffAttendance extends Model
 
     protected $guarded = ['attendance_id'];
 
-    protected $casts = [
-        'checkin_time' => 'datetime:Y-m-d H:i:s',
-        'departure_time' => 'datetime:Y-m-d H:i:s',
-    ];
+    protected $appends = ['division_name'];
 
-    protected $appends = ['staff'];
-
-    public function getStaffAttribute()
+    public function updatedBy()
     {
-        return VWStaff::where('staff_number', $this->staff_number)->first()->full_name;
-
+        return $this->belongsTo(User::class, 'updated_by_id', 'id');
     }
 
+    public function getDivisionNameAttribute()
+    {
+        return SystemLOV::find($this->attributes['division'])->name;
+    }
+
+
+    public function division_name()
+    {
+        return $this->belongsTo(SystemLOV::class, 'division', 'id');
+    }
 }

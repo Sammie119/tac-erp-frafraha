@@ -19,8 +19,14 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Add New Permission" data-bs-url="form_create/createPermission" data-bs-size="modal-lg"> <i class="bi bi-plus-lg"></i> Add Permission</button>
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($permissions->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Name',
                             ['name' => 'Action', 'width' => '17%', 'classes' => 'no-sort']
@@ -50,6 +56,4 @@
     <x-call-modal />
 
 @endsection
-
-<x-ajax-call-search :url="'search_permissions'" />
 

@@ -9,13 +9,15 @@ use Illuminate\View\Component;
 class SecondDatatable extends Component
 {
     public array $headers;
+    public int $checkData;
     /**
      * Create a new component instance.
      */
-    public function __construct(array $headers)
+    public function __construct(array $headers, int $checkData = 0)
     {
 //        dd($this->formatHeader($headers));
         $this->headers = $this->formatHeader($headers);
+        $this->checkData = $checkData;
     }
 
     private function formatHeader(array $headers): array

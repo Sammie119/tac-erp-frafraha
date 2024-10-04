@@ -4,9 +4,15 @@
 
     </x-datatable.second-card-header>
 
+    @php
+        $checkData = 1;
+        if(empty($completed->toArray()))
+            $checkData = 0;
+    @endphp
+
     <div class="card-body p-0 mb-3">
 
-        <x-datatable.second-datatable :headers="[
+        <x-datatable.second-datatable :checkData="$checkData" :headers="[
             ['name' => '#', 'width' => '5%'],
             'Name',
             ['name' => 'Description', 'width' => '45%'],

@@ -20,8 +20,14 @@
                         @endcan
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($payments->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0 mb-3">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Invoice No',
                             'Receipt No',
@@ -80,8 +86,5 @@
     <x-ajax-call-input-fields :ajax_url="'get_search_invoice'" :form="'transactions.ajax_form.payment_form'" />
 
 @endsection
-
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_transactions'" />
 
 

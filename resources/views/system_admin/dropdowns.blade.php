@@ -20,8 +20,14 @@
                         @endcan
                     </x-datatable.card-header>
 
+                    @php
+                        $checkData = 1;
+                        if(empty($dropdowns->toArray()))
+                            $checkData = 0;
+                    @endphp
+
                     <div class="card-body p-0 mb-3">
-                        <x-datatable.datatable :headers="[
+                        <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Category Name',
                             ['name' => 'Action', 'width' => '20%', 'classes' => 'no-sort']
@@ -61,7 +67,4 @@
     <x-call-modal-toggle />
 
 @endsection
-
-{{-- {{ $url = 'search_users' }} --}}
-<x-ajax-call-search :url="'search_lov_category'" />
 

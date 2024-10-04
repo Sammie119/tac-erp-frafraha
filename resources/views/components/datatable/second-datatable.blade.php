@@ -2,7 +2,7 @@
     #dt-search-1 { width: 500px }
 </style>
 
-<table id="second_results_table" class="table table-striped">
+<table @if($checkData == 1) id="second_results_table" @endif class="table table-striped">
     <thead>
     <tr>
         @foreach($headers as $header)

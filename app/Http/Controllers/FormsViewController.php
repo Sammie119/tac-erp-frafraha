@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Requisition;
 use App\Models\RequisitionDetails;
 use App\Models\Setups;
+use App\Models\StaffAttendanceDetail;
 use App\Models\Task;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -106,6 +107,10 @@ class FormsViewController extends Controller
             case 'viewFinancial':
                 $data['financial'] = Financial::find($id);
                 return view('forms.view.view_financial', $data);
+
+            case 'viewAttendance':
+                $data['att_details'] = StaffAttendanceDetail::where('attendance_id', $id)->get();
+                return view('forms.view.view_attendance', $data);
 
             default:
                 return "No form Selected";

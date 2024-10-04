@@ -3,7 +3,7 @@
     #dt-search-0 { width: 500px }
 </style>
 
-<table id="results_table" class="table table-striped">
+<table @if($checkData == 1) id="results_table" @endif class="table table-striped">
     <thead>
     <tr>
         @foreach($headers as $header)
