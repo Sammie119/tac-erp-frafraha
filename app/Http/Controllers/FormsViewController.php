@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Financial;
 use App\Models\Products;
+use App\Models\ProductSubCategory;
 use App\Models\Project;
 use App\Models\Requisition;
 use App\Models\RequisitionDetails;
 use App\Models\Setups;
 use App\Models\StaffAttendanceDetail;
+use App\Models\Supplier;
 use App\Models\Task;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -111,6 +113,16 @@ class FormsViewController extends Controller
             case 'viewAttendance':
                 $data['att_details'] = StaffAttendanceDetail::where('attendance_id', $id)->get();
                 return view('forms.view.view_attendance', $data);
+
+            case 'viewSupplier':
+                $data['supplier'] = Supplier::find($id);
+                return view('forms.view.view_supplier', $data);
+
+            case 'createSubCategories':
+                $data['category'] = $id;
+                $data['values'] = ProductSubCategory::where('category_id', $id)->orderBy('name')->get();
+
+                return view('forms.view.create_sub_categories', $data);
 
             default:
                 return "No form Selected";

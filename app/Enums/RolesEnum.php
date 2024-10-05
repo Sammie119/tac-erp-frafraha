@@ -11,4 +11,5 @@ enum RolesEnum: string
     case TRANSACTIONSMANAGER = 'Transactions Manager';
     case PROJECTMANAGER = 'Project Manager';
     case FINANCIALMANAGER = 'Financial Manager';
+    case STORESMANAGER = 'Stores Manager';
 }

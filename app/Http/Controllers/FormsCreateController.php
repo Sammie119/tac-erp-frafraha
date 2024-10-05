@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Products;
+use App\Models\ProductSubCategory;
 use App\Models\Project;
 use App\Models\SystemLOV;
 use App\Models\VWStaff;
@@ -33,8 +34,10 @@ class FormsCreateController extends Controller
             case 'createProduct':
                 if(get_logged_in_user_id() === 1){
                     $data['type'] = SystemLOV::where('category_id', 8)->get();
+                    $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->orderBy('name')->get();
                 } else {
                     $data['type'] = SystemLOV::where('division', get_logged_user_division_id())->where('category_id', 8)->get();
+                    $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->where('division', get_logged_user_division_id())->orderBy('name')->get();
                 }
                 return view('forms.create.create_product', $data);
 
@@ -129,6 +132,9 @@ class FormsCreateController extends Controller
 
             case 'createAttendance':
                 return view('forms.create.create_attendance');
+
+            case 'createSupplier':
+                return view('forms.create.create_supplier');
 
             default:
                 return "No form Selected";

@@ -50,6 +50,26 @@
                     <td>{{ $product->stock_out }}</td>
                     <td></td>
                 </tr>
+                @can(\App\Enums\PermissionsEnum::CREATESTORESPRODUCTS->value)
+                    <tr class="align-middle">
+                        <td>6.</td>
+                        <td>{{__('Category')}}</td>
+                        <td>{{ getCategoryName($product->category) }}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="align-middle">
+                        <td>6.</td>
+                        <td>{{__('Sub Category')}}</td>
+                        <td>{{ getCategoryName($product->sub_category, 'Sub') }}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="align-middle">
+                        <td>6.</td>
+                        <td>{{__('Reorder Level')}}</td>
+                        <td>{{ $product->reorder_level }}</td>
+                        <td></td>
+                    </tr>
+                @endcan
                 <tr class="align-middle">
                     <td>7.</td>
                     <td>{{__('Cost Price')}}</td>

@@ -43,12 +43,10 @@
                                     <td>{{ $attendance->month }}</td>
                                     <td>{{ $attendance->year }}</td>
                                     <td>{{ $attendance->created_at }}</td>
-{{--                                    <td>{{ getDateFormat($attendance->checkin_time) }}</td>--}}
                                     <td>{{ $attendance->division_name }}</td>
                                     <td>{{ get_logged_staff_name($attendance->updatedBy->staff_id) }}</td>
                                     <td>
-                                        @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
-{{--                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="" data-bs-url="form_view/viewAttendance/{{ $attendance->id }}" data-bs-size="modal-xl"> Receipt</button>--}}
+                                        @can(\App\Enums\PermissionsEnum::STAFFATTENDANCE->value)
                                             <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="View Attendance - {{ $attendance->month }} {{ $attendance->year }}" data-bs-url="form_view/viewAttendance/{{ $attendance->attendance_id }}" data-bs-size="modal-xl"> View Attendance</button>
                                         @endcan
                                         @can(\App\Enums\PermissionsEnum::DELETEATTENDANCE->value)

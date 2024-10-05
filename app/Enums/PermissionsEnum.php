@@ -27,6 +27,7 @@ enum PermissionsEnum: string
     case REQUISITIONREQUEST = 'Requisition Request';
     case APPROVEREQUISITION = 'Approve Requisition';
     case DELETEREQUISITION = 'Delete Requisition';
+    case SUPPLIERSMANAGER = 'Suppliers Manager';
 
     //LOV Permissions
     case CREATELOV = 'Create LOVs';
@@ -66,7 +67,8 @@ enum PermissionsEnum: string
     case DELETEFINANCIAL = 'Delete Financial';
     case FINANCIALREPORT = 'Financial Report';
 
-
+    //STORES MANAGER
+    case CREATESTORESPRODUCTS = 'Create Stores Products';
 }
 
 

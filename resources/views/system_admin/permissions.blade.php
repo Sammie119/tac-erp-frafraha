@@ -42,7 +42,7 @@
                                 </tr>
                             @empty
                                 <tr class="align-middle">
-                                    <td colspan="5">No Data</td>
+                                    <td colspan="10">No Data</td>
                                 </tr>
                             @endforelse
                         </x-datatable.datatable>

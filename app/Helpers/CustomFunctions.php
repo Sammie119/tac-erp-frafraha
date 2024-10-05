@@ -1,11 +1,13 @@
 <?php
 
 use App\Enums\RolesEnum;
+use App\Models\ProductSubCategory;
 use App\Models\Setups;
 use App\Models\SystemLOV;
 use App\Models\VWStaff;
 use App\Models\VWUser;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 use Spatie\Permission\Models\Permission;
 
 if (!function_exists("get_logged_in_user_id")) {
@@ -168,5 +170,17 @@ if(!function_exists("getDateFormat")){
     {
         $date = date_create($datetime);
         return date_format($date,"Y-m-d h:i A");
+    }
+}
+
+if(!function_exists("getCategoryName")){
+    function getCategoryName($id, $type = 'Category')
+    {
+        if($type == 'Category'){
+            $category = SystemLOV::find($id)->name;
+        } else {
+            $category = ProductSubCategory::find($id)->name;
+        }
+        return $category;
     }
 }

@@ -20,7 +20,7 @@
             <input type="text" name="transaction_name" class="form-control" value="{{ isset($financial) ? $financial->name : "" }}" id="transaction_name" placeholder="{{ __('Transaction Name') }}" required>
         </div>
         <div class="col-12 mb-3">
-            <label for="banker" class="form-label">{{ __('Transaction Description') }}</label>
+            <label for="description" class="form-label">{{ __('Transaction Description') }}</label>
             @isset($financial)
                 <textarea name="description" id="description" rows="2" class="form-control" required>{{ $financial->description }}</textarea>
             @else

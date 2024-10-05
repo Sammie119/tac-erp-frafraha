@@ -19,7 +19,7 @@ class StaffAttendanceController extends Controller
         if(get_logged_in_user_id() === 1){
             $data['attendances'] = StaffAttendance::orderByDesc('attendance_id')->get();//paginate(30);
         } else {
-            $data['attendances'] = StaffAttendance::where('division', get_logged_user_division_id())->orderByDesc('attendance_date')->get();//paginate(30);
+            $data['attendances'] = StaffAttendance::where('division', get_logged_user_division_id())->orderByDesc('attendance_id')->get();//paginate(30);
         }
         return view('staff.attendance', $data);
     }
@@ -59,23 +59,7 @@ class StaffAttendanceController extends Controller
 
     public function export()
     {
-        return Excel::download(new AttendanceExport(), 'attendance.xlsx');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(StaffAttendance $staffAttendance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, StaffAttendance $staffAttendance)
-    {
-        //
+        return Excel::download(new AttendanceExport(), 'attendance_template.xlsx');
     }
 
     /**

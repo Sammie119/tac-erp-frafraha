@@ -31,7 +31,7 @@
             topEnd: null,
             bottomEnd: {
                 pageLength: {
-                    menu: [ 10, 25, 50, 100 ]
+                    menu: [ 5, 10, 25, 50, 100, 500, 1000 ]
                 },
                 paging: {
                     buttons: 10

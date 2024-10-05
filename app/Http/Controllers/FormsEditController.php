@@ -6,12 +6,14 @@ use App\Models\Customer;
 use App\Models\Financial;
 use App\Models\ProductPrice;
 use App\Models\Products;
+use App\Models\ProductSubCategory;
 use App\Models\Project;
 use App\Models\Requisition;
 use App\Models\RequisitionDetails;
 use App\Models\RestockProduct;
 use App\Models\Setups;
 use App\Models\Staff;
+use App\Models\Supplier;
 use App\Models\Task;
 use App\Models\TaskProgress;
 use App\Models\Transaction;
@@ -56,8 +58,10 @@ class FormsEditController extends Controller
                 $data['product'] = Products::find($id);
                 if(get_logged_in_user_id() === 1){
                     $data['type'] = SystemLOV::where('category_id', 8)->get();
+                    $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->orderBy('name')->get();
                 } else {
                     $data['type'] = SystemLOV::where('division', get_logged_user_division_id())->where('category_id', 8)->get();
+                    $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->where('division', get_logged_user_division_id())->orderBy('name')->get();
                 }
                 return view('forms.create.create_product', $data);
 
@@ -182,6 +186,10 @@ class FormsEditController extends Controller
                 $data['transaction_mode'] = SystemLOV::where('category_id', 9)->get();
                 $data['department'] = SystemLOV::where('category_id', 6)->get();
                 return view('forms.create.create_financial_entry', $data);
+
+            case 'editSupplier':
+                $data['supplier'] = Supplier::find($id);
+                return view('forms.create.create_supplier', $data);
 
             default:
                 return "No form Selected";

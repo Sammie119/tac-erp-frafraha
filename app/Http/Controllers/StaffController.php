@@ -54,6 +54,7 @@ class StaffController extends Controller
             'bank_branch' => $request['bank_branch'],
             'bank_sort_code' => $request['bank_sort_code'],
             'ghana_card' => $request['ghana_card'],
+            'division' => get_logged_user_division_id(),
             'created_by_id' => get_logged_in_user_id(),
             'updated_by_id' => get_logged_in_user_id(),
         ]);
@@ -93,6 +94,7 @@ class StaffController extends Controller
             'bank_branch' => $request['bank_branch'],
             'bank_sort_code' => $request['bank_sort_code'],
             'ghana_card' => $request['ghana_card'],
+            'division' => get_logged_user_division_id(),
             'updated_by_id' => get_logged_in_user_id(),
         ]);
 

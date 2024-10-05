@@ -46,6 +46,8 @@
                     {{ request()->is('restock_products') ? 'active' : '' }}
                     {{ request()->is('product_pricing') ? 'active' : '' }}
                     {{ request()->is('requisitions') ? 'active' : '' }}
+                    {{ request()->is('suppliers') ? 'active' : '' }}
+                    {{ request()->is('sub_categories') ? 'active' : '' }}
                     "> <i class="nav-icon bi bi-box-seam-fill" style="font-size: 20px"></i>
                             <p>
                                 Inventory
@@ -70,6 +72,18 @@
                                     <p>Requisition</p>
                                 </a>
                             </li>
+                            @endcan
+                            @can(\App\Enums\PermissionsEnum::SUPPLIERSMANAGER->value)
+                                <li class="nav-item"> <a href="{{ route('suppliers') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                                        <p>Suppliers</p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can(\App\Enums\PermissionsEnum::CREATESTORESPRODUCTS->value)
+                                <li class="nav-item"> <a href="{{ route('sub_categories') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                                        <p>Sub Categories</p>
+                                    </a>
+                                </li>
                             @endcan
                         </ul>
                     </li>
@@ -149,36 +163,32 @@
                         </ul>
                     </li>
                 @endif
-                <li class="nav-item"> <a href="#" class="nav-link
-                {{ request()->is('financials') ? 'active' : '' }}
-                {{ request()->is('financial_report') ? 'active' : '' }}
-                "> <i class="nav-icon bi bi-cash-coin" style="font-size: 20px"></i>
-                        <p>
-                            Financials
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @can(\App\Enums\PermissionsEnum::VIEWFINANCIAL->value)
+                @can(\App\Enums\PermissionsEnum::VIEWFINANCIAL->value)
+                    <li class="nav-item"> <a href="#" class="nav-link
+                    {{ request()->is('financials') ? 'active' : '' }}
+                    {{ request()->is('financial_report') ? 'active' : '' }}
+                    "> <i class="nav-icon bi bi-cash-coin" style="font-size: 20px"></i>
+                            <p>
+                                Financials
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
                             <li class="nav-item"> <a href="{{ route('financials') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
                                     <p>Financial Entries</p>
                                 </a>
                             </li>
-                        @endcan
-                        @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
                             <li class="nav-item"> <a href="{{ route('payments') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
                                     <p>Payment</p>
                                 </a>
                             </li>
-                        @endcan
-                        @can(\App\Enums\PermissionsEnum::FINANCIALREPORT->value)
                             <li class="nav-item"> <a href="{{ route('financial_report') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
                                     <p>Financial Reports</p>
                                 </a>
                             </li>
-                        @endcan
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endcan
                 <li class="nav-item"> <a href="#" class="nav-link"> <i class="bi bi-house-door" style="font-size: 20px"></i>
                         <p>
                             Stores

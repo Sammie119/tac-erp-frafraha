@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductPrice;
 use App\Models\Products;
+use App\Models\ProductSubCategory;
 use App\Models\RestockProduct;
 use Illuminate\Http\Request;
 
@@ -16,9 +17,9 @@ class ProductsController extends Controller
     {
 //        where('division', get_logged_user_division_id())
         if(get_logged_in_user_id() === 1){
-            $data['products'] = Products::orderBy('name')->get();//paginate(30);
+            $data['products'] = Products::orderByDesc('created_at')->get();//paginate(30);
         } else {
-            $data['products'] = Products::where('division', get_logged_user_division_id())->orderBy('name')->get();//paginate(30);
+            $data['products'] = Products::where('division', get_logged_user_division_id())->orderByDesc('created_at')->get();//paginate(30);
         }
         return view('product.products', $data);
     }
@@ -28,17 +29,24 @@ class ProductsController extends Controller
      */
     public function store (Request $request)
     {
-//         dd(get_logged_user_division_id());
+//         dd($request->all());
         $request->validate([
             'type' => ['required', 'integer'],
             'name' => ['required'],
             'description' => ['required'],
         ]);
 
+        if($request->has('sub_category')){
+            $category_id = ProductSubCategory::find($request['sub_category'])->category_id;
+        }
+
         Products::firstOrCreate([
             'name' => $request['name'],
             'division' => get_logged_user_division_id()
         ],[
+            'category' => isset($request['sub_category']) ? $category_id : null,
+            'sub_category' => isset($request['sub_category']) ? $request['sub_category'] : null,
+            'reorder_level' => isset($request['reorder_level']) ? $request['reorder_level'] : null,
             'description' => $request['description'],
             'type' => $request['type'],
             'created_by_id' => get_logged_in_user_id(),
@@ -60,12 +68,19 @@ class ProductsController extends Controller
             'description' => ['required'],
         ]);
 
+        if($request->has('sub_category')){
+            $category_id = ProductSubCategory::find($request['sub_category'])->category_id;
+        }
+
         $product = Products::find($request->id);
         $product->update([
             'name' => $request['name'],
             'division' => get_logged_user_division_id(),
             'description' => $request['description'],
             'type' => $request['type'],
+            'category' => isset($request['sub_category']) ? $category_id : null,
+            'sub_category' => isset($request['sub_category']) ? $request['sub_category'] : null,
+            'reorder_level' => isset($request['reorder_level']) ? $request['reorder_level'] : null,
             'updated_by_id' => get_logged_in_user_id(),
         ]);
 

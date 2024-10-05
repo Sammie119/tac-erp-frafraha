@@ -10,6 +10,7 @@ use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SetupsController;
 use App\Http\Controllers\StaffAttendanceController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionReportController;
@@ -71,6 +72,14 @@ Route::middleware('auth')->group(function () {
                     Route::put('requisition_store', 'update');
                     Route::post('delete_requisition', 'destroy')->middleware('permission:'.PermissionsEnum::DELETEREQUISITION->value);
                     Route::post('approve_requisition', 'approveRequisition')->middleware('permission:'.PermissionsEnum::APPROVEREQUISITION->value);
+                });
+            });
+
+            Route::group(['middleware' => ['permission:'.PermissionsEnum::CREATESTORESPRODUCTS->value]], function () {
+                Route::controller(DropdownsController::class)->group(function () {
+                    Route::get('sub_categories', 'indexSubCategories')->name('sub_categories');
+                    Route::post('sub_categories_store', 'storeSubCategories');
+                    Route::post('delete_sub_categories', 'destroySubCategories');
                 });
             });
         });
@@ -135,6 +144,15 @@ Route::middleware('auth')->group(function () {
             Route::post('delete_financial', 'destroy')->middleware('permission:'.PermissionsEnum::DELETEFINANCIAL->value);
             Route::get('financial_report', 'financialReport')->name('financial_report')->middleware('permission:'.PermissionsEnum::FINANCIALREPORT->value);
             // Route::post('system_lovs_store', 'store');
+        });
+    });
+
+    Route::group(['middleware' => ['permission:'.PermissionsEnum::SUPPLIERSMANAGER->value]], function () {
+        Route::controller(SupplierController::class)->group(function () {
+            Route::get('suppliers', 'index')->name('suppliers');
+            Route::post('supplier_store', 'store');
+            Route::put('supplier_store', 'update');
+            Route::post('delete_supplier', 'destroy');
         });
     });
 

@@ -85,6 +85,14 @@ class FormsDeleteController extends Controller
                 $data['attendance'] = $id;
                 return view('forms.delete.delete_attendance', $data);
 
+            case 'deleteSupplier':
+                $data['supplier'] = $id;
+                return view('forms.delete.delete_supplier', $data);
+
+            case 'deleteSubCategory':
+                $data['sub_category'] = $id;
+                return view('forms.delete.delete_sub_category', $data);
+
             default:
                 return "No form Selected";
         }

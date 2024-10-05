@@ -15,7 +15,12 @@ class WaybillController extends Controller
      */
     public function index()
     {
-        $data['waybills'] = Waybill::orderbyDesc('bill_date')->get();//paginate(30);
+        if(get_logged_in_user_id() === 1){
+            $data['waybills'] = Waybill::orderbyDesc('bill_date')->get();//paginate(30);
+        } else {
+            $data['waybills'] = Waybill::where('division', get_logged_user_division_id())->orderByDesc('bill_date')->get();//paginate(30);
+        }
+
         return view('transactions.waybills', $data);
     }
 

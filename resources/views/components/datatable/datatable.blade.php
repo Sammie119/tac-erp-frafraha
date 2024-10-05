@@ -1,6 +1,14 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.bootstrap5.css">
 <style>
     #dt-search-0 { width: 500px }
+
+    /*#results_table_info {*/
+    /*    margin-left: 20px;*/
+    /*}*/
+
+    /*.dt-paging {*/
+    /*    margin-right: 20px;*/
+    /*}*/
 </style>
 
 <table @if($checkData == 1) id="results_table" @endif class="table table-striped">
@@ -37,7 +45,7 @@
             topEnd: null,
             bottomEnd: {
                 pageLength: {
-                    menu: [ 10, 25, 50, 100 ]
+                    menu: [ 5, 10, 25, 50, 100, 500, 1000 ]
                 },
                 paging: {
                     buttons: 10
