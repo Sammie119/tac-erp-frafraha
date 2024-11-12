@@ -2,10 +2,13 @@
 
 use App\Enums\PermissionsEnum;
 use App\Enums\RolesEnum;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FinancialController;
+use App\Http\Controllers\FinancialPeriodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SetupsController;
@@ -154,6 +157,37 @@ Route::middleware('auth')->group(function () {
             Route::put('supplier_store', 'update');
             Route::post('delete_supplier', 'destroy');
         });
+    });
+
+    Route::group(['middleware' => ['permission:'.PermissionsEnum::MANAGERCUSTOMER->value]], function () {
+        Route::controller(CustomerController::class)->group(function () {
+            Route::get('customers', 'index')->name('customers');
+            Route::post('customer_store', 'store');
+            Route::put('customer_store', 'update');
+            Route::post('delete_customer', 'destroy');
+        });
+    });
+
+    Route::group(['middleware' => ['role:'.RolesEnum::SYSTEMADMIN->value]], function () {
+        Route::group(['middleware' => ['permission:'.PermissionsEnum::PURCHASEORDER->value]], function () {
+            Route::controller(PurchaseOrderController::class)->group(function () {
+                Route::get('purchase_orders', 'index')->name('purchase_orders');
+                Route::post('purchase_order_store', 'store');
+                Route::put('purchase_order_store', 'update');
+                Route::post('delete_purchase_order', 'destroy');
+            });
+        });
+
+        //change permission later
+        Route::group(['middleware' => ['permission:'.PermissionsEnum::PURCHASEORDER->value]], function () {
+            Route::controller(FinancialPeriodController::class)->group(function () {
+                Route::get('financial_periods', 'index')->name('financial_periods');
+                Route::post('financial_period_store', 'store');
+                Route::put('financial_period_store', 'update');
+                Route::post('delete_financial_period', 'destroy');
+            });
+        });
+
     });
 
     Route::group(['middleware' => ['role:'.RolesEnum::SYSTEMADMIN->value]], function () {

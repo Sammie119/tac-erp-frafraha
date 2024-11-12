@@ -14,6 +14,17 @@
             </tr>
             </thead>
             <tbody>
+                @can(\App\Enums\PermissionsEnum::CREATESTORESPRODUCTS->value)
+                    @isset($product->image_url)
+                        <tr>
+                            <td colspan="4" align="center">
+                                <div class="input-group mb-1" style="margin-left: auto">
+                                    <img src="/storage/{{ $product->image_url }}" alt="Image" width="150">
+                                </div>
+                            </td>
+                        </tr>
+                    @endisset
+                @endcan
                 <tr class="align-middle">
                     <td>1.</td>
                     <td>{{__('Product Name')}}</td>

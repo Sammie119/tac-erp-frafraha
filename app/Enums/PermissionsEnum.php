@@ -69,6 +69,8 @@ enum PermissionsEnum: string
 
     //STORES MANAGER
     case CREATESTORESPRODUCTS = 'Create Stores Products';
+    case MANAGERCUSTOMER = 'Manager Customer';
+    case PURCHASEORDER = 'Create Purchase Order';
 }
 
 

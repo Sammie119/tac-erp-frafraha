@@ -7,6 +7,7 @@ use App\Models\Products;
 use App\Models\ProductSubCategory;
 use App\Models\RestockProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductsController extends Controller
 {
@@ -34,10 +35,26 @@ class ProductsController extends Controller
             'type' => ['required', 'integer'],
             'name' => ['required'],
             'description' => ['required'],
+            'image' => ['nullable', 'file', 'image', 'max:1024', 'mimes:jpeg,png,jpg,gif,svg'],
         ]);
 
         if($request->has('sub_category')){
             $category_id = ProductSubCategory::find($request['sub_category'])->category_id;
+        }
+//dd($request->file('image'));
+        if($request->file('image') != null){
+
+//            $file = 'storage/'.$setup->text_logo;
+//            if (File::exists(public_path($file))) {
+//                File::delete($file);
+//            }
+//            dd($request->image);
+            $destinationPath = 'storage/uploads/products';
+            $file = 'tac'.date('YmdHis') . "." . $request->image->getClientOriginalExtension();
+            $request->image->move($destinationPath, $file);
+
+            $request['image_url'] = 'uploads/products/'.$file;
+
         }
 
         Products::firstOrCreate([
@@ -47,6 +64,7 @@ class ProductsController extends Controller
             'category' => isset($request['sub_category']) ? $category_id : null,
             'sub_category' => isset($request['sub_category']) ? $request['sub_category'] : null,
             'reorder_level' => isset($request['reorder_level']) ? $request['reorder_level'] : null,
+            'image_url' => isset($request['image_url']) ? $request['image_url'] : null,
             'description' => $request['description'],
             'type' => $request['type'],
             'created_by_id' => get_logged_in_user_id(),
@@ -73,6 +91,22 @@ class ProductsController extends Controller
         }
 
         $product = Products::find($request->id);
+
+        if($request->file('image') != null){
+
+            $file = 'storage/'.$product->image_url;
+            if (File::exists(public_path($file))) {
+                File::delete($file);
+            }
+//            dd($request->image);
+            $destinationPath = 'storage/uploads/products';
+            $file = 'tac'.date('YmdHis') . "." . $request->image->getClientOriginalExtension();
+            $request->image->move($destinationPath, $file);
+
+            $request['image_url'] = 'uploads/products/'.$file;
+
+        }
+
         $product->update([
             'name' => $request['name'],
             'division' => get_logged_user_division_id(),
@@ -81,6 +115,7 @@ class ProductsController extends Controller
             'category' => isset($request['sub_category']) ? $category_id : null,
             'sub_category' => isset($request['sub_category']) ? $request['sub_category'] : null,
             'reorder_level' => isset($request['reorder_level']) ? $request['reorder_level'] : null,
+            'image_url' => isset($request['image_url']) ? $request['image_url'] : null,
             'updated_by_id' => get_logged_in_user_id(),
         ]);
 

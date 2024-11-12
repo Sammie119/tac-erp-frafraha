@@ -6,36 +6,34 @@
             <label for="report_month" class="col-md-12 col-form-label">{{ __('Attendance Month') }}</label>
 
             <div class="col-md-12">
-                <select class="form-control" name="att_month" required>
-                    <option value="" selected disabled>--Select Month--</option>
-                    <option {{ (date('m') === '01') ? 'selected' : null }}>January</option>
-                    <option {{ (date('m') === '02') ? 'selected' : null }}>February</option>
-                    <option {{ (date('m') === '03') ? 'selected' : null }}>March</option>
-                    <option {{ (date('m') === '04') ? 'selected' : null }}>April</option>
-                    <option {{ (date('m') === '05') ? 'selected' : null }}>May</option>
-                    <option {{ (date('m') === '06') ? 'selected' : null }}>June</option>
-                    <option {{ (date('m') === '07') ? 'selected' : null }}>July</option>
-                    <option {{ (date('m') === '08') ? 'selected' : null }}>August</option>
-                    <option {{ (date('m') === '09') ? 'selected' : null }}>September</option>
-                    <option {{ (date('m') === '10') ? 'selected' : null }}>October</option>
-                    <option {{ (date('m') === '11') ? 'selected' : null }}>November</option>
-                    <option {{ (date('m') === '12') ? 'selected' : null }}>December</option>
-                </select>
+                <x-input-select
+                    :options="['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']"
+                    :selected="isset($period) ? $period->status : 0"
+                    :values="['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']"
+                    :type="1"
+                    name="att_month"
+                    required
+                />
             </div>
         </div>
         <div class="col-md-6 mb-3">
             <label for="report_month" class="col-md-12 col-form-label">{{ __('Attendance Year') }}</label>
 
             <div class="col-md-12">
-                <select class="form-control" name="att_year" required>
-                    <option value="" selected disabled>--Select Year--</option>
-                    <?php
+                <?php
+                    $years = [];
                     for($i = 2022 ; $i <= date('Y'); $i++){
-                        $thisYear = (date('Y') == $i) ? 'selected' : null;
-                        echo "<option ". $thisYear .">$i</option>";
+                        $years[] = $i;
                     }
-                    ?>
-                </select>
+                ?>
+                <x-input-select
+                    :options="$years"
+                    :selected="date('Y')"
+                    :values="$years"
+                    :type="1"
+                    name="att_year"
+                    required
+                />
             </div>
         </div>
         <div class="col-sm-12">

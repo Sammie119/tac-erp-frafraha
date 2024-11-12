@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Products;
 use App\Models\ProductSubCategory;
 use App\Models\Project;
+use App\Models\Supplier;
 use App\Models\SystemLOV;
 use App\Models\VWStaff;
 use App\Models\VWTransactions;
@@ -135,6 +136,16 @@ class FormsCreateController extends Controller
 
             case 'createSupplier':
                 return view('forms.create.create_supplier');
+
+            case 'createCustomer':
+                return view('forms.create.create_customer');
+
+            case 'createPurchaseOrder':
+                $data['suppliers'] = Supplier::select('supplier_name as name')->orderBy('supplier_name')->get();
+                return view('forms.create.create_purchase_order', $data);
+
+            case 'createFinancialPeriod':
+                return view('forms.create.create_financial_period');
 
             default:
                 return "No form Selected";

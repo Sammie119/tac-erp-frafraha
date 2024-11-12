@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Financial;
 use App\Models\Products;
 use App\Models\ProductSubCategory;
@@ -121,8 +122,12 @@ class FormsViewController extends Controller
             case 'createSubCategories':
                 $data['category'] = $id;
                 $data['values'] = ProductSubCategory::where('category_id', $id)->orderBy('name')->get();
-
+                $data['units'] = SystemLOV::where('category_id', 15)->get();
                 return view('forms.view.create_sub_categories', $data);
+
+            case 'viewCustomer':
+                $data['customer'] = Customer::find($id);
+                return view('forms.view.view_customers', $data);
 
             default:
                 return "No form Selected";

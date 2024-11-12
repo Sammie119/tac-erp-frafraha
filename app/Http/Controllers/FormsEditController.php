@@ -8,6 +8,7 @@ use App\Models\ProductPrice;
 use App\Models\Products;
 use App\Models\ProductSubCategory;
 use App\Models\Project;
+use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\RequisitionDetails;
 use App\Models\RestockProduct;
@@ -190,6 +191,15 @@ class FormsEditController extends Controller
             case 'editSupplier':
                 $data['supplier'] = Supplier::find($id);
                 return view('forms.create.create_supplier', $data);
+
+            case 'editCustomer':
+                $data['customer'] = Customer::find($id);
+                return view('forms.create.create_customer', $data);
+
+            case 'editPurchaseOrder':
+                $data['purchase_order'] = PurchaseOrder::find($id);
+                $data['suppliers'] = Supplier::select('supplier_name as name')->orderBy('supplier_name')->get();
+                return view('forms.create.create_purchase_order', $data);
 
             default:
                 return "No form Selected";

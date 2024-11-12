@@ -10,6 +10,7 @@
             </tr>
             <tr>
                 <th>Sub Category Name</th>
+                <th style="width: 20%">M. Unit</th>
                 <th>Description</th>
                 <th style="width: 40px">Action</th>
             </tr>
@@ -20,6 +21,10 @@
                     <td>
                         <input type="hidden" name="value_id[]" value="{{ $value->sub_category_id }}">
                         <input type="text" value="{{ $value->name }}" class="form-control" name="value[]">
+                    </td>
+                    <td>
+                        <x-input-select :options="$units" :selected="isset($category) ? $value->unit : 0" name="unit[]" required />
+{{--                        <input type="text" value="{{ $value->unit }}" class="form-control" name="description[]">--}}
                     </td>
                     <td>
                         <input type="text" value="{{ $value->description }}" class="form-control" name="description[]">
@@ -48,6 +53,9 @@
         var fieldHTML = `<tr class="align-middle">
                 <td>
                     <input type="text" class="form-control" name="value[]">
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="unit[]">
                 </td>
                 <td>
                     <input type="text" class="form-control" name="description[]">

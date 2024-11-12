@@ -33,11 +33,14 @@
         <div class="row mb-3">
             <label for="status" class="col-sm-2 col-form-label">{{ __('Status') }}</label>
             <div class="col-sm-10">
-                <select id="status" name="status" class="form-control">
-                    <option value="0" @if($project->status == 0) selected @endif>Pending</option>
-                    <option value="1" @if($project->status == 1) selected @endif>In Progress</option>
-                    <option value="2" @if($project->status == 2) selected @endif>Completed</option>
-                </select>
+                <x-input-select
+                    :options="['Pending', 'In Progress', 'Completed']"
+                    :selected="isset($project) ? $project->status : 3"
+                    :values="[0, 1, 2]"
+                    :type="1"
+                    name="status"
+                    required
+                />
             </div>
         </div>
     @endisset

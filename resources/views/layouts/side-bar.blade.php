@@ -10,258 +10,158 @@
         <nav class="mt-2"> <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}"> <i class="nav-icon bi bi-speedometer" style="font-size: 20px"></i>
-                        <p>Dashboard</p>
-                    </a>
+                    <x-menu-item :route="'dashboard'" :icon="'speedometer'">Dashboard</x-menu-item>
                 </li>
 
                 @if(use_roles_sidebar(RolesEnum::STAFFMANAGER))
-                    <li class="nav-item"> <a href="#" class="nav-link
-                    {{ request()->is('staff') ? 'active' : '' }}
-                    {{ request()->is('attendance') ? 'active' : '' }}
-                    "> <i class="nav-icon bi bi-people" style="font-size: 20px"></i>
-                            <p>
-                                Staff Management
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['staff', 'attendance', 'customers']"
+                        :icon="'people'"
+                        :title="'Staff Management'"
+                    >
                         <ul class="nav nav-treeview">
-                            <li class="nav-item"> <a href="{{ route('staff') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Staff</p>
-                                </a>
-                            </li>
+                            <x-menu-item :route="'staff'">Staff</x-menu-item>
+
                             @can(\App\Enums\PermissionsEnum::STAFFATTENDANCE->value)
-                                <li class="nav-item"> <a href="{{ route('attendance') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Attendance</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'attendance'">Attendance</x-menu-item>
+                            @endcan
+
+                            @can(\App\Enums\PermissionsEnum::MANAGERCUSTOMER->value)
+                                <x-menu-item :route="'customers'">Customers</x-menu-item>
                             @endcan
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endif
 
                 @if(use_roles_sidebar(RolesEnum::PRODUCTMANAGER))
-                    <li class="nav-item"> <a href="#" class="nav-link
-                    {{ request()->is('products') ? 'active' : '' }}
-                    {{ request()->is('restock_products') ? 'active' : '' }}
-                    {{ request()->is('product_pricing') ? 'active' : '' }}
-                    {{ request()->is('requisitions') ? 'active' : '' }}
-                    {{ request()->is('suppliers') ? 'active' : '' }}
-                    {{ request()->is('sub_categories') ? 'active' : '' }}
-                    "> <i class="nav-icon bi bi-box-seam-fill" style="font-size: 20px"></i>
-                            <p>
-                                Inventory
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['products', 'restock_products', 'product_pricing', 'requisitions', 'suppliers', 'sub_categories']"
+                        :icon="'seam'"
+                        :title="'Inventory'"
+                    >
                         <ul class="nav nav-treeview">
-                            <li class="nav-item"> <a href="{{ route('products') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Products</p>
-                                </a>
-                            </li>
-                            <li class="nav-item"> <a href="{{ route('restock_products') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Restock</p>
-                                </a>
-                            </li>
-                            <li class="nav-item"> <a href="{{ route('product_pricing') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Pricing</p>
-                                </a>
-                            </li>
+                            <x-menu-item :route="'products'">Products</x-menu-item>
+
+                            <x-menu-item :route="'restock_products'">Restock</x-menu-item>
+
+                            <x-menu-item :route="'product_pricing'">Pricing</x-menu-item>
+
                             @can(\App\Enums\PermissionsEnum::REQUISITIONREQUEST->value)
-                            <li class="nav-item"> <a href="{{ route('requisitions') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Requisition</p>
-                                </a>
-                            </li>
+                                <x-menu-item :route="'requisitions'">Requisition</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::SUPPLIERSMANAGER->value)
-                                <li class="nav-item"> <a href="{{ route('suppliers') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Suppliers</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'suppliers'">Suppliers</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::CREATESTORESPRODUCTS->value)
-                                <li class="nav-item"> <a href="{{ route('sub_categories') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Sub Categories</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'sub_categories'">Sub Categories</x-menu-item>
                             @endcan
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endif
 
                 @if(use_roles_sidebar(RolesEnum::TRANSACTIONSMANAGER))
-                    <li class="nav-item"> <a href="#" class="nav-link
-                    {{ request()->is('transactions') ? 'active' : '' }}
-                    {{ request()->is('payments') ? 'active' : '' }}
-                    {{ request()->is('transaction_reports') ? 'active' : '' }}
-                    {{ request()->is('waybills') ? 'active' : '' }}
-                    "> <i class="nav-icon bi bi-cash-coin" style="font-size: 20px"></i>
-                            <p>
-                                Transactions
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['transactions', 'payments', 'transaction_reports', 'waybills']"
+                        :icon="'cash'"
+                        :title="'Transactions'"
+                    >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::VIEWINVOICE->value)
-                                <li class="nav-item"> <a href="{{ route('transactions') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Generate Invoice</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'transactions'">Generate Invoice</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
-                                <li class="nav-item"> <a href="{{ route('payments') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Make Payment</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'payments'">Make Payment</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::PRINTWAYBILL->value)
-                            <li class="nav-item"> <a href="{{ route('waybills') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Waybill</p>
-                                </a>
-                            </li>
+                                <x-menu-item :route="'waybills'">Waybill</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWTRANSACTIONREPORT->value)
-                                <li class="nav-item"> <a href="{{ route('transaction_reports') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Transaction Report</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'transaction_reports'">Transaction Report</x-menu-item>
                             @endcan
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endif
 
                 @if(use_roles_sidebar(RolesEnum::PROJECTMANAGER))
-                    <li class="nav-item"> <a href="#" class="nav-link
-                    {{ request()->is('projects') ? 'active' : '' }}
-                    {{ request()->is('tasks') ? 'active' : '' }}
-                    {{ request()->is('my_tasks') ? 'active' : '' }}
-                    "> <i class="bi bi-pc-display" style="font-size: 20px"></i>
-                            <p>
-                                Project Management
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['projects', 'tasks', 'my_tasks']"
+                        :icon="'display'"
+                        :title="'Project Management'"
+                    >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::VIEWALLTASK->value)
-                            <li class="nav-item"> <a href="{{ route('my_tasks') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>My Tasks</p>
-                                </a>
-                            </li>
+                                <x-menu-item :route="'my_tasks'">My Tasks</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWPROJECT->value)
-                            <li class="nav-item"> <a href="{{ route('projects') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Projects</p>
-                                </a>
-                            </li>
+                                <x-menu-item :route="'projects'">Projects</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWTASK->value)
-                            <li class="nav-item"> <a href="{{ route('tasks') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Tasks</p>
-                                </a>
-                            </li>
+                                <x-menu-item :route="'tasks'">Tasks</x-menu-item>
                             @endcan
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endif
                 @can(\App\Enums\PermissionsEnum::VIEWFINANCIAL->value)
-                    <li class="nav-item"> <a href="#" class="nav-link
-                    {{ request()->is('financials') ? 'active' : '' }}
-                    {{ request()->is('financial_report') ? 'active' : '' }}
-                    "> <i class="nav-icon bi bi-cash-coin" style="font-size: 20px"></i>
-                            <p>
-                                Financials
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['financials', 'financial_report']"
+                        :icon="'cash'"
+                        :title="'Financials'"
+                    >
                         <ul class="nav nav-treeview">
-                            <li class="nav-item"> <a href="{{ route('financials') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Financial Entries</p>
-                                </a>
-                            </li>
-                            <li class="nav-item"> <a href="{{ route('payments') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Payment</p>
-                                </a>
-                            </li>
-                            <li class="nav-item"> <a href="{{ route('financial_report') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Financial Reports</p>
-                                </a>
-                            </li>
+                            <x-menu-item :route="'financials'">Financial Entries</x-menu-item>
+
+                            <x-menu-item :route="'payments'">Payment</x-menu-item>
+
+                            <x-menu-item :route="'financial_report'">Financial Reports</x-menu-item>
+
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endcan
-                <li class="nav-item"> <a href="#" class="nav-link"> <i class="bi bi-house-door" style="font-size: 20px"></i>
-                        <p>
-                            Stores
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="./tables/simple.html" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Simple Tables</p>
-                            </a> </li>
-                    </ul>
-                </li>
+
+                @if(use_roles_sidebar(RolesEnum::STORESMANAGER))
+                    <x-main-menu-item
+                        :menu_open="['purchase_orders']"
+                        :icon="'house'"
+                        :title="'Stores'"
+                    >
+                        <ul class="nav nav-treeview">
+                            @can(\App\Enums\PermissionsEnum::PURCHASEORDER->value)
+                                <x-menu-item :route="'purchase_orders'">Purchase Order</x-menu-item>
+                            @endcan
+                        </ul>
+                    </x-main-menu-item>
+                @endif
 
                 @if(use_roles_sidebar(RolesEnum::USERSMANAGER) || use_roles_sidebar(RolesEnum::SYSTEMADMIN))
-                    <li class="nav-item"> <a href="#" class="nav-link
-                        {{ request()->is('users') ? 'active' : '' }}
-                        {{ request()->is('system_lovs') ? 'active' : '' }}
-                        {{ request()->is('roles') ? 'active' : '' }}
-                        {{ request()->is('permissions') ? 'active' : '' }}
-                        {{ request()->is('setups') ? 'active' : '' }}
-
-                        "> <i class="nav-icon bi bi-person" style="font-size: 20px"></i>
-                            <p>
-                                System Admin
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
-                        </a>
+                    <x-main-menu-item
+                        :menu_open="['users', 'system_lovs', 'roles', 'permissions', 'setups', 'financial_periods']"
+                        :icon="'person'"
+                        :title="'System Admin'"
+                    >
                         <ul class="nav nav-treeview">
                             @if(use_roles_sidebar(RolesEnum::USERSMANAGER))
-                                <li class="nav-item"> <a href="{{ route('users') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>User Management</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'users'">User Management</x-menu-item>
                             @endif
 
                             @if(use_roles_sidebar(RolesEnum::SYSTEMADMIN))
-                                <li class="nav-item"> <a href="{{ route('system_lovs') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>List of Values</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'financial_periods'">Financial Periods</x-menu-item>
+                            @endif
+
+                            @if(use_roles_sidebar(RolesEnum::SYSTEMADMIN))
+                                <x-menu-item :route="'system_lovs'">List of Values</x-menu-item>
                             @endif
 
                             @if(get_logged_in_user_id() === 1)
-                                <li class="nav-item"> <a href="{{ route('permissions') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Permissions</p>
-                                    </a>
-                                </li>
+                                <x-menu-item :route="'permissions'">Permissions</x-menu-item>
 
-                                <li class="nav-item"> <a href="{{ route('roles') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                        <p>Roles</p>
-                                    </a>
-                                </li>
-                           @endif
+                                <x-menu-item :route="'roles'">Roles</x-menu-item>
+                            @endif
 
-                            <li class="nav-item"> <a href="{{ route('setups') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                    <p>Setups</p>
-                                </a>
-                            </li>
-                            {{-- <li class="nav-item"> <a href="{{ route('profile.edit') }}" class="nav-link"> <i class="nav-icon bi bi-circle"></i> <!-- <i class="nav-icon bi bi-people"></i> -->
-                                <p>{{ __('Profile') }}</p>
-                            </a>
+                            <x-menu-item :route="'setups'">Setups</x-menu-item>
 
-                            <li class="nav-item"> <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link"> <i class="nav-icon bi bi-circle"></i> <!-- <i class="nav-icon bi bi-people"></i> -->
-                                <p>{{ __('Log Out') }}</p>
-                            </a> --}}
-
-    {{--                    </li>--}}
                         </ul>
-                    </li>
+                    </x-main-menu-item>
                 @endif
-                {{-- <li class="nav-item"> <a href="" class="nav-link"> <i class="nav-icon bi bi-people"></i>
-                    <p></p>
-                </a> </li> --}}
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->

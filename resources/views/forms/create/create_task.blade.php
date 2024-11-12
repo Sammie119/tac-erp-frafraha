@@ -31,11 +31,14 @@
     <div class="row mb-3">
         <label for="priority" class="col-sm-2 col-form-label">{{ __('Task Priority') }}</label>
         <div class="col-sm-10">
-            <select id="priority" name="priority" class="form-control" required>
-                <option value="0" @if(isset($task) && $task->priority == 0) selected @else selected @endif >Low</option>
-                <option value="1" @if(isset($task) && $task->priority == 1) selected @endif>Medium</option>
-                <option value="2" @if(isset($task) && $task->priority == 2) selected @endif>High</option>
-            </select>
+            <x-input-select
+                :options="['Low', 'Medium', 'High']"
+                :selected="isset($task) ? $task->priority : 0"
+                :values="[0, 1, 2]"
+                :type="1"
+                name="priority"
+                required
+            />
         </div>
     </div>
     <div class="row mb-3">

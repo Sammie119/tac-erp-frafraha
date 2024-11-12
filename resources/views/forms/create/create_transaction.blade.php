@@ -119,7 +119,7 @@
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label">Phone</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control cusInput" name="phone">
+                        <input type="number" min="1" step="1" class="form-control cusInput" name="phone">
                     </div>
                 </div>
                 <div class="mb-3 row">

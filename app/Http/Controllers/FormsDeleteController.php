@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\PurchaseOrder;
 use App\Models\RestockProduct;
 use App\Models\Staff;
 use App\Models\User;
@@ -92,6 +93,14 @@ class FormsDeleteController extends Controller
             case 'deleteSubCategory':
                 $data['sub_category'] = $id;
                 return view('forms.delete.delete_sub_category', $data);
+
+            case 'deleteCustomer':
+                $data['customer'] = $id;
+                return view('forms.delete.delete_customer', $data);
+
+            case 'deletePurchaseOrder':
+                $data['purchase_order'] = $id;
+                return view('forms.delete.delete_purchase_order', $data);
 
             default:
                 return "No form Selected";

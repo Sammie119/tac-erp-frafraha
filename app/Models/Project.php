@@ -21,6 +21,6 @@ class Project extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id', 'id');
+        return $this->belongsTo(User::class, 'supplier_id', 'supplier_id');
     }
 }

@@ -1,4 +1,4 @@
-<form method="POST" action="product_store">
+<form method="POST" action="product_store" enctype="multipart/form-data">
     @csrf
     @isset($product)
         @method('put')
@@ -43,6 +43,17 @@
             <div class="col-sm-10">
                 <input type="number" step="1" min="1" id="reorder_level" name="reorder_level" value="{{ isset($product) ? $product->reorder_level : "" }}" class="form-control" required>
             </div>
+        </div>
+        <div class="row mb-3">
+            <label for="image" class="col-sm-2 col-form-label">{{ __('Product Image') }}</label>
+            <div class="col-sm-10">
+                <input type="file" id="image" name="image" class="form-control" required>
+            </div>
+        </div>
+        <div class="input-group mb-1">
+            @isset($product->image_url)
+                <img src="/storage/{{ $product->image_url }}" alt="Image" width="150">
+            @endisset
         </div>
     @endcan
     {{-- Buttons --}}

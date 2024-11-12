@@ -165,6 +165,18 @@ if(!function_exists("getPaymentStatus")){
     }
 }
 
+if(!function_exists("getOrderStatus")){
+    function getOrderStatus($status = 0)
+    {
+        $paymentStatus = [
+            0 => "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Pending</span>",
+            1 => "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Received</span>",
+        ][$status] ?? 0;
+
+        return $paymentStatus;
+    }
+}
+
 if(!function_exists("getDateFormat")){
     function getDateFormat($datetime)
     {

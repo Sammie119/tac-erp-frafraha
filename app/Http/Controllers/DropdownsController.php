@@ -110,17 +110,19 @@ class DropdownsController extends Controller
                 ProductSubCategory::updateOrCreate([
                         'category_id' => $request->id,
                         'name' => $value,
-                        'description' => $request->description[$key],
+                        'unit' => $request->unit[$key],
                         'division' => get_logged_user_division_id(),
 
                     ],
                     [
+                        'description' => $request->description[$key],
                         'created_by_id' => get_logged_in_user_id(),
                         'updated_by_id' =>  get_logged_in_user_id(),
                     ]);
             } else {
                 ProductSubCategory::find($request->value_id[$key])->update([
                     'name' => $value,
+                    'unit' => $request->unit[$key],
                     'description' => $request->description[$key],
                     'updated_by_id' =>  get_logged_in_user_id(),
                 ]);
