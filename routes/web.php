@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
             Route::put('price_product_store', 'productPricingUpdate')->middleware('permission:'.PermissionsEnum::UPDATEPRODUCT->value);
             Route::post('delete_price_product', 'productPricingDestroy')->middleware('permission:'.PermissionsEnum::DELETEPRODUCT->value);
 
+            Route::get('materials', 'indexMaterial')->name('materials')->middleware('permission:'.PermissionsEnum::VIEWPRODUCT->value);
+
             Route::group(['middleware' => ['permission:'.PermissionsEnum::REQUISITIONREQUEST->value]], function () {
                 Route::controller(RequisitionController::class)->group(function () {
                     Route::get('requisitions', 'index')->name('requisitions');

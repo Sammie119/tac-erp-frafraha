@@ -14,6 +14,27 @@ class Products extends Model
 
     protected $primaryKey = 'product_id';
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model){
+
+            $model->sku = 'TAC-'.date('Y')."-".strtotime(now());
+
+            return $model;
+        });
+
+        static::updating(function ($model){
+
+            if(empty($model->sku) || $model->sku == null){
+                $model->sku = 'TAC-'.date('Y')."-".strtotime(now());
+            }
+
+            return $model;
+        });
+    }
+
     public function division_name(){
         return $this->belongsTo(SystemLOV::class,'division','id');
     }

@@ -57,11 +57,10 @@ class FormsEditController extends Controller
 
             case 'editProduct':
                 $data['product'] = Products::find($id);
+                $data['type'] = SystemLOV::where('category_id', 8)->get();
                 if(get_logged_in_user_id() === 1){
-                    $data['type'] = SystemLOV::where('category_id', 8)->get();
                     $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->orderBy('name')->get();
                 } else {
-                    $data['type'] = SystemLOV::where('division', get_logged_user_division_id())->where('category_id', 8)->get();
                     $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->where('division', get_logged_user_division_id())->orderBy('name')->get();
                 }
                 return view('forms.create.create_product', $data);

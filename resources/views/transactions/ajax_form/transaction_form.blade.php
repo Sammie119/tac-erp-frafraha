@@ -1,6 +1,9 @@
 <div class="row mb-2">
     <div class="form-group col-6">
-        <select class="form-control bg-white" name="product_id[]"><option value="${data.product_id}" selected>${data.product_description}</option></select>
+        <select class="form-control bg-white mb-1" name="product_id[]"><option value="${data.product_id}" selected>${data.product_description}</option></select>
+        @if(get_logged_user_division_id() === 14)
+            <input type="text" class="form-control bg-white" name="product_description[]" placeholder="Enter Product Description">
+        @endif
     </div>
     <div class="form-group col-2">
         <input type="number" class="form-control bg-white px-0 quantity" name="quantity[]" style="text-align: center;" required>

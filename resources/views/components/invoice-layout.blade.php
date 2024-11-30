@@ -91,7 +91,7 @@
                 @foreach ($transaction_details as $key => $trans )
                     <tr style = "padding-top: 5px; padding-bottom: 5px;">
                         <td style = "padding-left: 10px; vertical-align: text-top;">{{ ++$key }}.</td>
-                        <td style = "text-align: left; padding-left: 3px;">{{ $trans->product_name->name }} <br> {{ $trans->product_name->description  }}</td>
+                        <td style = "text-align: left; padding-left: 3px;">{{ $trans->product_name->name }} <br> {{ $trans->product_description  }}</td>
                         <td style = "text-align: center; vertical-align: text-top;">{{ $trans->quantity }}</td>
                         <td style = "text-align: right; vertical-align: text-top;">{{  number_format($trans->unit_price, 2) }}</td>
                         <td style = "text-align: right; padding-right: 10px; vertical-align: text-top;">{{ number_format($trans->amount, 2) }}</td>

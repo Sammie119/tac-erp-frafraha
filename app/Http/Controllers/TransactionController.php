@@ -29,7 +29,7 @@ class TransactionController extends Controller
 
     public function transactionsStore(Request $request)
     {
-        //dd($request->all());
+//        dd($request->all());
         $request->validate([
             'taxable' => ['required'],
             'total_amount' => ['required'],
@@ -81,6 +81,7 @@ class TransactionController extends Controller
                 'quantity' => $request->quantity[$i],
                 'unit_price' => $request->unit_price[$i],
                 'amount' => $request->amount[$i],
+                'product_description' => $request->product_description[$i],
                 'division' => get_logged_user_division_id(),
                 'created_by_id' => get_logged_in_user_id(),
                 'updated_by_id' => get_logged_in_user_id(),
@@ -156,6 +157,7 @@ class TransactionController extends Controller
                 'quantity' => $request->quantity[$i],
                 'unit_price' => $request->unit_price[$i],
                 'amount' => $request->amount[$i],
+                'product_description' => $request->product_description[$i],
                 'division' => get_logged_user_division_id(),
                 'created_by_id' => get_logged_in_user_id(),
                 'updated_by_id' => get_logged_in_user_id(),

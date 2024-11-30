@@ -8,6 +8,7 @@ use App\Models\ProductSubCategory;
 use App\Models\RestockProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class ProductsController extends Controller
 {
@@ -18,11 +19,21 @@ class ProductsController extends Controller
     {
 //        where('division', get_logged_user_division_id())
         if(get_logged_in_user_id() === 1){
-            $data['products'] = Products::orderByDesc('created_at')->get();//paginate(30);
+            $data['products'] = Products::where('is_material', 0)->orderByDesc('created_at')->get();//paginate(30);
         } else {
-            $data['products'] = Products::where('division', get_logged_user_division_id())->orderByDesc('created_at')->get();//paginate(30);
+            $data['products'] = Products::where(['is_material' => 0,'division' => get_logged_user_division_id()])->orderByDesc('created_at')->get();//paginate(30);
         }
         return view('product.products', $data);
+    }
+
+    public function indexMaterial()
+    {
+        if(get_logged_in_user_id() === 1){
+            $data['products'] = Products::where('is_material', 1)->orderByDesc('created_at')->get();//paginate(30);
+        } else {
+            $data['products'] = Products::where(['is_material' => 1,'division' => get_logged_user_division_id()])->orderByDesc('created_at')->get();//paginate(30);
+        }
+        return view('product.materials', $data);
     }
 
     /**
@@ -67,11 +78,15 @@ class ProductsController extends Controller
             'image_url' => isset($request['image_url']) ? $request['image_url'] : null,
             'description' => $request['description'],
             'type' => $request['type'],
+            'is_material' => isset($request['is_material']) ? $request['is_material'] : 0,
             'created_by_id' => get_logged_in_user_id(),
             'updated_by_id' => get_logged_in_user_id(),
         ]);
 
-        return redirect(route('products', absolute: false))->with('success', 'Product Created Successfully!!!');
+        if(isset($request['is_material']))
+            return redirect(route('materials', absolute: false))->with('success', 'Material Created Successfully!!!');
+        else
+            return redirect(route('products', absolute: false))->with('success', 'Product Created Successfully!!!');
     }
 
     /**
@@ -116,10 +131,14 @@ class ProductsController extends Controller
             'sub_category' => isset($request['sub_category']) ? $request['sub_category'] : null,
             'reorder_level' => isset($request['reorder_level']) ? $request['reorder_level'] : null,
             'image_url' => isset($request['image_url']) ? $request['image_url'] : null,
+            'is_material' => isset($request['is_material']) ? $request['is_material'] : 0,
             'updated_by_id' => get_logged_in_user_id(),
         ]);
 
-        return redirect(route('products', absolute: false))->with('success', 'Product Updated Successfully!!!');
+        if(isset($request['is_material']))
+            return redirect(route('materials', absolute: false))->with('success', 'Material Updated Successfully!!!');
+        else
+            return redirect(route('products', absolute: false))->with('success', 'Product Updated Successfully!!!');
     }
 
     /**
@@ -130,7 +149,10 @@ class ProductsController extends Controller
 //         dd($request->id);
         Products::find($request->id)->delete();
 
-        return redirect(route('products', absolute: false))->with('success', 'Product deleted Successfully!!!');
+        if(Session::get('material') === 'materials')
+            return redirect(route('materials', absolute: false))->with('success', 'Material Deleted Successfully!!!');
+        else
+            return redirect(route('products', absolute: false))->with('success', 'Product Deleted Successfully!!!');
     }
 
     public function restockProductIndex()

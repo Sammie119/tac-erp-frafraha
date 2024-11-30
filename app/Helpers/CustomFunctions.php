@@ -45,6 +45,15 @@ if (!function_exists("get_logged_user_division_id")) {
     }
 }
 
+if (!function_exists("get_logged_user_division")) {
+    function get_logged_user_division(): string
+    {
+        $division = SystemLOV::find(Auth::user()->division);
+        return $division->name;
+
+    }
+}
+
 if (!function_exists("get_logged_user_division_name")) {
     function get_logged_user_division_name(): string
     {
@@ -196,3 +205,4 @@ if(!function_exists("getCategoryName")){
         return $category;
     }
 }
+

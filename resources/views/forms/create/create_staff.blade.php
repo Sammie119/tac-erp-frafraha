@@ -40,11 +40,11 @@
             <input type="email" name="email" class="form-control" value="@isset($staff) {{ $staff->email }} @endisset" id="email" placeholder="{{ __('Email') }}">
         </div>
 
-        <div class="col-3 mb-3">
+        <div class="col-4 mb-3">
             <label for="position" class="form-label">{{ __('Marital Status') }}</label>
             <x-input-select :options="$married" :selected="isset($staff) ? $staff->married : 0" name="married" required />
         </div>
-        <div class="col-9 mb-3">
+        <div class="col-4 mb-3">
             <label for="address" class="form-label">{{ __('Residential Address') }}</label>
             <input type="text" name="address" class="form-control" value="@isset($staff) {{ $staff->address }} @endisset" id="address" placeholder="{{ __('Residential Address') }}" required>
         </div>
@@ -74,6 +74,37 @@
         <div class="col-4 mb-3">
             <label for="ghana_card" class="form-label">{{ __('Ghana Card Number') }}</label>
             <input type="text" name="ghana_card" class="form-control" value="@isset($staff) {{ $staff->ghana_card }} @endisset" id="ghana_card" placeholder="{{ __('Ghana Card Number') }}">
+        </div>
+
+        <div class="col-4 mb-3">
+            <label for="ssnit_number" class="form-label">{{ __('SSNIT Number') }}</label>
+            <input type="text" name="ssnit_number" class="form-control" value="@isset($staff) {{ $staff->ssnit_number }} @endisset" id="ssnit_number" placeholder="{{ __('SSNIT Number') }}">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="employment_date" class="form-label">{{ __('Employment Date') }}</label>
+            <input type="date" max="{{ date('Y-m-d') }}" name="employment_date" class="form-control" value="{{ isset($staff) ? $staff->employment_date : "" }}" id="employment_date" placeholder="{{ __('Employment Date') }}">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="salary_grade" class="form-label">{{ __('Salary Grade') }}</label>
+            <input type="text" name="salary_grade" class="form-control" value="@isset($staff) {{ $staff->salary_grade }} @endisset" id="salary_grade" placeholder="{{ __('Salary Grade') }}">
+        </div>
+
+        <div class="col-4 mb-3">
+            <label for="entry_qualification" class="form-label">{{ __('Entry Qualification') }}</label>
+            <input type="text" name="entry_qualification" class="form-control" value="@isset($staff) {{ $staff->entry_qualification }} @endisset" id="entry_qualification" placeholder="{{ __('Entry Qualification') }}">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="current_qualification" class="form-label">{{ __('Current Qualification') }}</label>
+            <input type="text" name="current_qualification" class="form-control" value="@isset($staff) {{ $staff->current_qualification }} @endisset" id="current_qualification" placeholder="{{ __('Current Qualification') }}">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="emergency_person" class="form-label">{{ __('Emergency Person') }}</label>
+            <input type="text" name="emergency_person" class="form-control" value="@isset($staff) {{ $staff->emergency_person }} @endisset" id="emergency_person" placeholder="{{ __('Emergency Person') }}">
+        </div>
+
+        <div class="col-4 mb-3">
+            <label for="emergency_contact" class="form-label">{{ __('Emergency Contact') }}</label>
+            <input type="text" name="emergency_contact" class="form-control" value="@isset($staff) {{ $staff->emergency_contact }} @endisset" id="emergency_contact" placeholder="{{ __('Emergency Contact') }}">
         </div>
     </div>
 

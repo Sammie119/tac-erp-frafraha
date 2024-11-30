@@ -92,6 +92,48 @@
                     <td>{{ $staff->ghana_card }}</td>
                     <td></td>
                 </tr>
+                <tr class="align-middle">
+                    <td>14.</td>
+                    <td>{{__('SSNIT Number')}}</td>
+                    <td>{{ $staff->ssnit_number }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>15.</td>
+                    <td>{{__('Employment Date')}}</td>
+                    <td>{{ $staff->employment_date }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>16.</td>
+                    <td>{{__('Salary Grade')}}</td>
+                    <td>{{ $staff->salary_grade }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>17.</td>
+                    <td>{{__('Entry Qualification')}}</td>
+                    <td>{{ $staff->entry_qualification }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>18.</td>
+                    <td>{{__('Current Qualification')}}</td>
+                    <td>{{ $staff->current_qualification }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>19.</td>
+                    <td>{{__('Emergency Person')}}</td>
+                    <td>{{ $staff->emergency_person }}</td>
+                    <td></td>
+                </tr>
+                <tr class="align-middle">
+                    <td>20.</td>
+                    <td>{{__('Emergency Contact')}}</td>
+                    <td>{{ $staff->emergency_contact }}</td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
     </div> <!-- /.card-body -->

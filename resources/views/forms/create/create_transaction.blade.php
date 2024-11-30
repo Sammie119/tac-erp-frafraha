@@ -61,7 +61,10 @@
                 @foreach($transaction_details as $transaction_detail)
                     <div class="row mb-2">
                         <div class="form-group col-6">
-                            <select class="form-control bg-white" name="product_id[]"><option value="{{ $transaction_detail->product_id }}" selected>{{ $transaction_detail->product_name->name }}</option></select>
+                            <select class="form-control bg-white mb-1" name="product_id[]"><option value="{{ $transaction_detail->product_id }}" selected>{{ $transaction_detail->product_name->name }}</option></select>
+                            @if(get_logged_user_division_id() === 14)
+                                <input type="text" class="form-control bg-white" name="product_description[]" placeholder="Enter Product Description" value="{{ $transaction_detail->product_description }}">
+                            @endif
                         </div>
                         <div class="form-group col-2">
                             <input type="number" class="form-control bg-white px-0 quantity" name="quantity[]" value="{{ $transaction_detail->quantity }}" style="text-align: center;" required>
@@ -81,6 +84,7 @@
             @else
                 <div class="show_data">No Data Found</div>
             @endisset
+        </div>
     </div>
 
     <hr>

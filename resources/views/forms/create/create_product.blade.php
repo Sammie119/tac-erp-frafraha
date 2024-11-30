@@ -47,7 +47,7 @@
         <div class="row mb-3">
             <label for="image" class="col-sm-2 col-form-label">{{ __('Product Image') }}</label>
             <div class="col-sm-10">
-                <input type="file" id="image" name="image" class="form-control" required>
+                <input type="file" id="image" name="image" class="form-control">
             </div>
         </div>
         <div class="input-group mb-1">
@@ -55,6 +55,13 @@
                 <img src="/storage/{{ $product->image_url }}" alt="Image" width="150">
             @endisset
         </div>
+
+        @if(Session::get('material') === 'materials')
+            <input type="hidden" value="1" name="is_material">
+        @endif
+
+        {{ Session::forget('material') }}
+        {{ Session::get('material') }}
     @endcan
     {{-- Buttons --}}
     <div class="modal-footer">

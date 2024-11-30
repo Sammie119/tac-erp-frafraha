@@ -1,10 +1,10 @@
 @extends('layouts.master')
 
-@section('title', 'TAC PRESS | Products')
+@section('title', 'TAC PRESS | Materials')
 
 @section('content')
 
-    <x-breadcrumb>{{ get_logged_user_division_id() === 14 ? 'Item Descriptions' : 'Product Management' }}</x-breadcrumb>
+    <x-breadcrumb>Material Management</x-breadcrumb>
 
     <div class="app-content">
         <div class="container-fluid">
@@ -14,9 +14,9 @@
             <div class="col-md-12">
                 <div class="card mb-4">
 
-                    <x-datatable.card-header :icon="'products'" :title="get_logged_user_division_id() === 14 ? 'Items List' : 'Products List'">
+                    <x-datatable.card-header :icon="'products'" :title="'Material List'">
                         @can(\App\Enums\PermissionsEnum::CREATEPRODUCT->value)
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Add New Product" data-bs-url="form_create/createProduct" data-bs-size="modal-lg"> <i class="bi bi-plus-lg"></i> Add Product</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Add New Material" data-bs-url="form_create/createProduct" data-bs-size="modal-lg"> <i class="bi bi-plus-lg"></i> Add Material</button>
                         @endcan
                     </x-datatable.card-header>
 
@@ -43,13 +43,13 @@
                                     <td>{{ $product->stock_in }}</td>
                                     <td>
                                         @can(\App\Enums\PermissionsEnum::VIEWPRODUCT->value)
-                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="View Products Detail - {{ $product->name }}" data-bs-url="form_view/viewProduct/{{ $product->product_id }}" data-bs-size="modal-lg"> View Product</button>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="View Materials Detail - {{ $product->name }}" data-bs-url="form_view/viewProduct/{{ $product->product_id }}" data-bs-size="modal-lg"> View Material</button>
                                         @endcan
                                         @can(\App\Enums\PermissionsEnum::UPDATEPRODUCT->value)
-                                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Edit Product Details" data-bs-url="form_edit/editProduct/{{ $product->product_id }}" data-bs-size="modal-lg" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-pencil-square"></i></button>
+                                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Edit  Details" data-bs-url="form_edit/editProduct/{{ $product->product_id }}" data-bs-size="modal-lg" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-pencil-square"></i></button>
                                         @endcan
                                         @can(\App\Enums\PermissionsEnum::DELETEPRODUCT->value)
-                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Product Deletion" data-bs-url="form_delete/deleteProduct/{{ $product->product_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Material Deletion" data-bs-url="form_delete/deleteProduct/{{ $product->product_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
                                         @endcan
                                     </td>
                                 </tr>
@@ -68,7 +68,9 @@
 
     <x-call-modal />
 
-    {{ Session::forget('material') }}
+    @php
+        session(['material' => Request::path()]);
+    @endphp
 
 @endsection
 

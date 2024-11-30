@@ -35,26 +35,33 @@
 
                 @if(use_roles_sidebar(RolesEnum::PRODUCTMANAGER))
                     <x-main-menu-item
-                        :menu_open="['products', 'restock_products', 'product_pricing', 'requisitions', 'suppliers', 'sub_categories']"
+                        :menu_open="['products', 'restock_products', 'product_pricing', 'requisitions', 'suppliers', 'sub_categories', 'materials']"
                         :icon="'seam'"
                         :title="'Inventory'"
                     >
                         <ul class="nav nav-treeview">
-                            <x-menu-item :route="'products'">Products</x-menu-item>
+                            <x-menu-item :route="'products'">{{ get_logged_user_division_id() === 14 ? 'Item Descriptions' : 'Products' }}</x-menu-item>
 
                             <x-menu-item :route="'restock_products'">Restock</x-menu-item>
 
                             <x-menu-item :route="'product_pricing'">Pricing</x-menu-item>
 
+                            @if(get_logged_user_division_id() === 14)
+                                <x-menu-item :route="'materials'">Materials</x-menu-item>
+                            @endif
+
                             @can(\App\Enums\PermissionsEnum::REQUISITIONREQUEST->value)
                                 <x-menu-item :route="'requisitions'">Requisition</x-menu-item>
                             @endcan
+
                             @can(\App\Enums\PermissionsEnum::SUPPLIERSMANAGER->value)
                                 <x-menu-item :route="'suppliers'">Suppliers</x-menu-item>
                             @endcan
+
                             @can(\App\Enums\PermissionsEnum::CREATESTORESPRODUCTS->value)
                                 <x-menu-item :route="'sub_categories'">Sub Categories</x-menu-item>
                             @endcan
+
                         </ul>
                     </x-main-menu-item>
                 @endif
