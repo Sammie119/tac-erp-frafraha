@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banking;
 use App\Models\Customer;
 use App\Models\Financial;
 use App\Models\Products;
@@ -128,6 +129,10 @@ class FormsViewController extends Controller
             case 'viewCustomer':
                 $data['customer'] = Customer::find($id);
                 return view('forms.view.view_customers', $data);
+
+            case 'viewSalesBanking':
+                $data['sales'] = Banking::find($id);
+                return view('forms.view.view_sales_banking', $data);
 
             default:
                 return "No form Selected";

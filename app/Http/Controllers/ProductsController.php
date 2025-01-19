@@ -54,18 +54,7 @@ class ProductsController extends Controller
         }
 //dd($request->file('image'));
         if($request->file('image') != null){
-
-//            $file = 'storage/'.$setup->text_logo;
-//            if (File::exists(public_path($file))) {
-//                File::delete($file);
-//            }
-//            dd($request->image);
-            $destinationPath = 'storage/uploads/products';
-            $file = 'tac'.date('YmdHis') . "." . $request->image->getClientOriginalExtension();
-            $request->image->move($destinationPath, $file);
-
-            $request['image_url'] = 'uploads/products/'.$file;
-
+            $request['image_url'] = $this->imageUpload($request->file('image'), 'products');
         }
 
         Products::firstOrCreate([
@@ -108,18 +97,7 @@ class ProductsController extends Controller
         $product = Products::find($request->id);
 
         if($request->file('image') != null){
-
-            $file = 'storage/'.$product->image_url;
-            if (File::exists(public_path($file))) {
-                File::delete($file);
-            }
-//            dd($request->image);
-            $destinationPath = 'storage/uploads/products';
-            $file = 'tac'.date('YmdHis') . "." . $request->image->getClientOriginalExtension();
-            $request->image->move($destinationPath, $file);
-
-            $request['image_url'] = 'uploads/products/'.$file;
-
+            $request['file_url'] = $this->imageUpload($request->file('image_url'), 'bank_files', $product->image_url);
         }
 
         $product->update([
@@ -167,9 +145,10 @@ class ProductsController extends Controller
 
     public function restockProductStore (Request $request)
     {
+//        dd($request->all());
         $request->validate([
-            'product_id' => ['required', 'integer'],
-            'quantity' => ['required', 'numeric', 'min:1'],
+            'product_id' => ['required'],
+            'quantity' => ['required'],
             'product_id.*' => ['required', 'integer'],
             'quantity.*' => ['required', 'numeric', 'min:1'],
         ]);

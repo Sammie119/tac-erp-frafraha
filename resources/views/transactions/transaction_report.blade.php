@@ -16,10 +16,10 @@
 
                     <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->
                         <x-card-button
-                            modal_title="Invoice Report"
-                            modal_url="form_report/invoiceReport"
+                            modal_title="Daily Income Report"
+                            modal_url="form_report/dailyIncome"
                             modal_size=""
-                            button_title="Invoice Report"
+                            button_title="Daily Income Report"
                             button_description="Transactions Report"
                             button_color="text-bg-primary"
                         >

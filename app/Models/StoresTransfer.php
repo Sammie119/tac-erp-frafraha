@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TransactionDetail extends Model
+class StoresTransfer extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -21,12 +21,12 @@ class TransactionDetail extends Model
             $product = Products::find($model->product_id);
 
 //            if($product->type === 20) {
-                if ($product->stock_in > 0){
-                    $product->update([
-                        'stock_in' => $product->stock_in - $model->quantity,
-                        'stock_out' => $product->stock_out + $model->quantity
-                    ]);
-                }
+            if ($product->stock_in > 0){
+                $product->update([
+                    'stock_in' => $product->stock_in - $model->quantity,
+                    'stock_out' => $product->stock_out + $model->quantity
+                ]);
+            }
 //            }
 
             return $model;
@@ -40,7 +40,5 @@ class TransactionDetail extends Model
         });
     }
 
-    public function product_name(){
-        return $this->belongsTo(Products::class,'product_id','product_id');
-    }
+
 }

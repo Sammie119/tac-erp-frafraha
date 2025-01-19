@@ -33,7 +33,11 @@ class FormsCreateController extends Controller
                 return view('forms.create.create_staff', $data);
 
             case 'createProduct':
-                $data['type'] = SystemLOV::where('category_id', 8)->get();
+                if (get_logged_user_division_id() === 42){
+                    $data['type'] = SystemLOV::where('category_id', 16)->get();
+                } else {
+                    $data['type'] = SystemLOV::where('category_id', 8)->get();
+                }
                 if(get_logged_in_user_id() === 1){
                     $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->orderBy('name')->get();
                 } else {
@@ -49,9 +53,9 @@ class FormsCreateController extends Controller
 
             case 'createRestockProducts':
                 if(get_logged_in_user_id() === 1){
-                    $data['items'] = Products::select('product_id as id', 'name')->where('type', 20)->get();
+                    $data['items'] = Products::select('product_id as id', 'name')->get();
                 } else {
-                    $data['items'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->where('type', 20)->get();
+                    $data['items'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->get();
                 }
                 return view('forms.create.create_restock_product', $data);
 
@@ -64,6 +68,7 @@ class FormsCreateController extends Controller
                 return view('forms.create.create_price_product', $data);
 
             case 'createTransaction':
+                $data['payment_methods'] = SystemLOV::where('category_id', 12)->get();
                 if(get_logged_in_user_id() === 1){
                     $data['products'] = Products::select('name')->orderBy('name')->get();
                     $data['customers'] = Customer::select('name')->orderBy('name')->get();
@@ -145,6 +150,23 @@ class FormsCreateController extends Controller
 
             case 'createFinancialPeriod':
                 return view('forms.create.create_financial_period');
+
+            case 'createSalesBanking':
+                return view('forms.create.create_sales_banking');
+
+            case 'createStoresTransfer':
+//                dd(get_logged_user_stores_division_ids());
+                if(get_logged_in_user_id() === 1){
+                    $data['items'] = Products::select('product_id as id', 'name')->get();
+                    $data['shops'] = SystemLOV::select('id', 'name')->where('parent_id', 42)->get();
+                } else {
+//                    $stores_array = implode(", ", get_logged_user_stores_division_ids());
+                    $data['items'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->get();
+//                        ->whereRaw("division IN ($stores_array)")->get();
+                    $data['shops'] = SystemLOV::select('id', 'name')->where('parent_id', 42)->get();
+//                    dd($data['shops']);
+                }
+                return view('forms.create.create_stores_transfer', $data);
 
             default:
                 return "No form Selected";

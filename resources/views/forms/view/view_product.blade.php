@@ -65,13 +65,13 @@
                     <tr class="align-middle">
                         <td>6.</td>
                         <td>{{__('Category')}}</td>
-                        <td>{{ getCategoryName($product->category) }}</td>
+                        <td>{{ $product->category ? getCategoryName($product->category) : null }}</td>
                         <td></td>
                     </tr>
                     <tr class="align-middle">
                         <td>6.</td>
                         <td>{{__('Sub Category')}}</td>
-                        <td>{{ getCategoryName($product->sub_category, 'Sub') }}</td>
+                        <td>{{ $product->sub_category ? getCategoryName($product->sub_category, 'Sub') : null }}</td>
                         <td></td>
                     </tr>
                     <tr class="align-middle">

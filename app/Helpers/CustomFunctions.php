@@ -45,10 +45,23 @@ if (!function_exists("get_logged_user_division_id")) {
     }
 }
 
-if (!function_exists("get_logged_user_division")) {
-    function get_logged_user_division(): string
+if (!function_exists("get_logged_user_stores_division_ids")) {
+    function get_logged_user_stores_division_ids(): array
     {
-        $division = SystemLOV::find(Auth::user()->division);
+        $st_array = SystemLOV::select('id')->where('parent_id', 42)->get()->pluck('id')->toArray();
+        $st_array[] = 42;
+        return $st_array;
+    }
+}
+
+if (!function_exists("get_logged_user_division")) {
+
+    function get_logged_user_division($id = null): string
+    {
+        if($id == null){
+            $id = Auth::user()->division;
+        }
+        $division = SystemLOV::find($id);
         return $division->name;
 
     }
@@ -128,19 +141,33 @@ if(!function_exists("invoice_num")){
 }
 
 if(!function_exists("getStatus")){
-    function getStatus($status)
+    function getStatus($status, $type = null)
     {
-        switch ($status) {
-            case 0:
-                return "<span class='badge bg-warning rounded-pill p-2' style='font-size: 14px'>Pending</span>";
-            case 1:
-                return "<span class='badge bg-primary rounded-pill p-2' style='font-size: 14px'>In Progress</span>";
-            case 2:
-                return "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Completed</span>";
-            case 3:
-                return "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Cancelled</span>";
-            default:
-                return "Unknown";
+        if($type === null) {
+            switch ($status) {
+                case 0:
+                    return "<span class='badge bg-warning rounded-pill p-2' style='font-size: 14px'>Pending</span>";
+                case 1:
+                    return "<span class='badge bg-primary rounded-pill p-2' style='font-size: 14px'>In Progress</span>";
+                case 2:
+                    return "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Completed</span>";
+                case 3:
+                    return "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Cancelled</span>";
+                default:
+                    return "Unknown";
+            }
+        }
+        elseif($type === 1) {
+            switch ($status) {
+                case 0:
+                    return "<span class='badge bg-warning rounded-pill p-2' style='font-size: 14px'>Pending</span>";
+                case 1:
+                    return "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Approved</span>";
+                case 2:
+                    return "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Rejected</span>";
+                default:
+                    return "Unknown";
+            }
         }
     }
 }

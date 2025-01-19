@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(GetAjaxCallController::class)->group(function() {
         Route::post('get_search_product', 'getSearchProduct');
         Route::post('get_search_invoice', 'getSearchInvoice');
+        Route::post('sales_received', 'getSalesReceived');
     });
 });
 

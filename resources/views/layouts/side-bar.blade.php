@@ -35,7 +35,7 @@
 
                 @if(use_roles_sidebar(RolesEnum::PRODUCTMANAGER))
                     <x-main-menu-item
-                        :menu_open="['products', 'restock_products', 'product_pricing', 'requisitions', 'suppliers', 'sub_categories', 'materials']"
+                        :menu_open="['products', 'restock_products', 'product_pricing', 'requisitions', 'suppliers', 'sub_categories', 'materials', 'stores_transfer']"
                         :icon="'seam'"
                         :title="'Inventory'"
                     >
@@ -48,6 +48,10 @@
 
                             @if(get_logged_user_division_id() === 14)
                                 <x-menu-item :route="'materials'">Materials</x-menu-item>
+                            @endif
+
+                            @if(get_logged_user_division_id() === 42)
+                                <x-menu-item :route="'stores_transfer'">Stock Transfer</x-menu-item>
                             @endif
 
                             @can(\App\Enums\PermissionsEnum::REQUISITIONREQUEST->value)
@@ -68,19 +72,22 @@
 
                 @if(use_roles_sidebar(RolesEnum::TRANSACTIONSMANAGER))
                     <x-main-menu-item
-                        :menu_open="['transactions', 'payments', 'transaction_reports', 'waybills']"
+                        :menu_open="['transactions', 'payments', 'transaction_reports', 'waybills', 'sales_banking']"
                         :icon="'cash'"
                         :title="'Transactions'"
                     >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::VIEWINVOICE->value)
-                                <x-menu-item :route="'transactions'">Generate Invoice</x-menu-item>
+                                <x-menu-item :route="'transactions'">{{ get_logged_user_division_id() === 42 ? 'Sales' : 'Generate Invoice' }}</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
                                 <x-menu-item :route="'payments'">Make Payment</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::PRINTWAYBILL->value)
                                 <x-menu-item :route="'waybills'">Waybill</x-menu-item>
+                            @endcan
+                            @can(\App\Enums\PermissionsEnum::CREATESALESBANKING->value)
+                                <x-menu-item :route="'sales_banking'">Sales Banking</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWTRANSACTIONREPORT->value)
                                 <x-menu-item :route="'transaction_reports'">Transaction Report</x-menu-item>

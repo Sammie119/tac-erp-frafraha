@@ -2,6 +2,7 @@
 
 use App\Enums\PermissionsEnum;
 use App\Enums\RolesEnum;
+use App\Http\Controllers\BankingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\FinancialPeriodController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SetupsController;
 use App\Http\Controllers\StaffAttendanceController;
+use App\Http\Controllers\StoresTransferController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TransactionController;
@@ -87,6 +89,16 @@ Route::middleware('auth')->group(function () {
                     Route::post('delete_sub_categories', 'destroySubCategories');
                 });
             });
+
+            // Stock Transfer
+            Route::controller(StoresTransferController::class)->group(function () {
+                Route::get('stores_transfer', 'index')->name('stores_transfer')->middleware('permission:'.PermissionsEnum::CREATESTORESTRANSFER->value);
+                Route::post('stores_transfer_store', 'store')->middleware('permission:'.PermissionsEnum::CREATESTORESTRANSFER->value);
+                Route::put('stores_transfer_store', 'update')->middleware('permission:'.PermissionsEnum::CREATESTORESTRANSFER->value);
+                Route::post('delete_stores_transfer', 'destroy')->middleware('permission:'.PermissionsEnum::DELETESTORESTRANSFER->value);
+                Route::put('approve_stores_transfer/{id}', 'transferApprove')->middleware('permission:'.PermissionsEnum::APPROVESTORESTRANSFER->value);
+            });
+
         });
     });
 
@@ -104,11 +116,20 @@ Route::middleware('auth')->group(function () {
             Route::get('print/{id}/{location}', 'invoicePrint')->name('print');
             Route::get('invoice/{id}/{type}', 'invoice');
             Route::get('invoice_pdf/{id}/{type}', 'invoicePdf')->name('invoice_pdf');
+
+            Route::controller(BankingController::class)->group(function () {
+                Route::get('sales_banking', 'index')->name('sales_banking')->middleware('permission:'.PermissionsEnum::CREATESALESBANKING->value);
+                Route::post('sales_banking_store', 'salesBankingStore')->middleware('permission:'.PermissionsEnum::CREATESALESBANKING->value);
+                Route::put('sales_banking_store', 'salesBankingUpdate')->middleware('permission:'.PermissionsEnum::CREATESALESBANKING->value);
+                Route::post('delete_sales_banking', 'salesBankingDestroy')->middleware('permission:'.PermissionsEnum::DELETESALESBANKING->value);
+                Route::put('approve_sales_banking/{id}', 'salesBankingApprove')->middleware('permission:'.PermissionsEnum::APPROVESALESBANKING->value);
+            });
         });
 
         Route::controller(TransactionReportController::class)->group(function () {
             Route::get('transaction_reports', 'index')->name('transaction_reports');
             Route::post('invoice_report', 'invoiceReport');
+            Route::post('daily_income_report', 'dailyIncomeReport');
 //            Route::put('setup_store', 'update');
         });
 

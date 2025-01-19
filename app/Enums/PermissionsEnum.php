@@ -71,6 +71,16 @@ enum PermissionsEnum: string
     case CREATESTORESPRODUCTS = 'Create Stores Products';
     case MANAGERCUSTOMER = 'Manager Customer';
     case PURCHASEORDER = 'Create Purchase Order';
+
+    // SALES BANKING
+    case CREATESALESBANKING = 'Create Sales Banking';
+    case APPROVESALESBANKING = 'Approve Sales Banking';
+    case DELETESALESBANKING = 'Delete Sales Banking';
+
+    // STORES TRANSFER
+    case CREATESTORESTRANSFER = 'Create Stores Transfer';
+    case APPROVESTORESTRANSFER = 'Approve Stores Transfer';
+    case DELETESTORESTRANSFER = 'Delete Stores Transfer';
 }
 
 

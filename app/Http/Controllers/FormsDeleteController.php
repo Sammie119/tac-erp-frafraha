@@ -22,29 +22,29 @@ class FormsDeleteController extends Controller
                 $data['user'] = $id;
                 return view('forms.delete.delete_user', $data);
 
-                case 'deleteCategory':
-                    $data['dropdown'] = $id;
-                    return view('forms.delete.delete_lov_category', $data);
+            case 'deleteCategory':
+                $data['dropdown'] = $id;
+                return view('forms.delete.delete_lov_category', $data);
 
-                case 'deleteLOV':
-                    $data['lov'] = $id;
-                    return view('forms.delete.delete_lov', $data);
+            case 'deleteLOV':
+                $data['lov'] = $id;
+                return view('forms.delete.delete_lov', $data);
 
-                case 'deleteStaff':
-                    $data['staff'] = $id;
-                    return view('forms.delete.delete_staff', $data);
+            case 'deleteStaff':
+                $data['staff'] = $id;
+                return view('forms.delete.delete_staff', $data);
 
-                case 'deleteProduct':
-                    $data['product'] = $id;
-                    return view('forms.delete.delete_product', $data);
+            case 'deleteProduct':
+                $data['product'] = $id;
+                return view('forms.delete.delete_product', $data);
 
             case 'deletePermission':
                 $data['permission'] = $id;
                 return view('forms.delete.delete_permission', $data);
 
-                case 'deleteRole':
-                    $data['role'] = $id;
-                    return view('forms.delete.delete_role', $data);
+            case 'deleteRole':
+                $data['role'] = $id;
+                return view('forms.delete.delete_role', $data);
 
             case 'deleteRestockProduct':
                 $data['restock'] = $id;
@@ -101,6 +101,10 @@ class FormsDeleteController extends Controller
             case 'deletePurchaseOrder':
                 $data['purchase_order'] = $id;
                 return view('forms.delete.delete_purchase_order', $data);
+
+            case 'deleteSalesBanking':
+                $data['sale'] = $id;
+                return view('forms.delete.delete_sales_banking', $data);
 
             default:
                 return "No form Selected";

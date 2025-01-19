@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\TransactionPayment;
 use App\Models\VWTransactions;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class GetAjaxCallController extends Controller
             $results = [
                 'stock' => $product->stock_in - $product->stock_out,
 //                'product_name' => $product->name,
-                'product_description' => $product->name,
+                'product_description' => $product->name.' ('.$product->stock_in - $product->stock_out.')',
                 'cost' => $product->cost,
                 'price' => $product->price,
                 'product_id' => $product->product_id,
@@ -60,6 +61,18 @@ class GetAjaxCallController extends Controller
         }
 
         return response()->json($results);
+    }
+
+    public function getSalesReceived(Request $request)
+    {
+//        dd($request->all());
+        $sum_sales = TransactionPayment::where('division', get_logged_user_division_id())
+            ->whereBetween('payment_date', [$request->start_date, $request->end_date])
+            ->sum('amount_paid');
+
+//        dd($sum_sales);
+
+        return response()->json($sum_sales);
     }
 
 }

@@ -17,17 +17,33 @@
             </div>
 
             <div class="form-group col-md-4 px-5 ">
-                <label for="recipient-name" class="control-label mb-2">Invoice Type</label>
-                <div class="row">
-                    <div class="form-check col-md-6">
-                        <input class="form-check-input" type="radio" name="taxable" value="1" id="taxable" {{ isset($transaction) ? (($transaction->taxable == 1) ? 'checked' : '') : 'checked' }}>
-                        <label class="form-check-label" for="taxable">Taxable</label>
+                @if(get_logged_user_division_id() !== 42)
+                    <label for="recipient-name" class="control-label mb-2">Invoice Type</label>
+                    <div class="row">
+                        <div class="form-check col-md-6">
+                            <input class="form-check-input" type="radio" name="taxable" value="1" id="taxable" {{ isset($transaction) ? (($transaction->taxable == 1) ? 'checked' : '') : 'checked' }}>
+                            <label class="form-check-label" for="taxable">Taxable</label>
+                        </div>
+                        <div class="form-check col-md-6">
+                            <input class="form-check-input" type="radio" name="taxable" value="0" id="non_taxable" {{ isset($transaction) ? (($transaction->taxable == 0) ? 'checked' : '') : '' }}>
+                            <label class="form-check-label" for="non_taxable">Non Taxable</label>
+                        </div>
                     </div>
-                    <div class="form-check col-md-6">
-                        <input class="form-check-input" type="radio" name="taxable" value="0" id="non_taxable" {{ isset($transaction) ? (($transaction->taxable == 0) ? 'checked' : '') : '' }}>
-                        <label class="form-check-label" for="non_taxable">Non Taxable</label>
+                @else
+                    <input class="form-check-input" type="hidden" name="taxable" value="0" id="non_taxable"  checked>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="position" class="form-label mb-2">{{ __('Payment Method') }}</label>
+                            <x-input-select :options="$payment_methods" :selected="isset($payment) ? $payment->payment_method : 32" name="payment_method" required />
+                        </div>
+                        <div class="form-check col-md-4">
+                            <div class="mt-4">
+                                <label class="form-check-label" for="non_taxable">Invoice</label>
+                                <input class="form-check-input" type="checkbox" name="checkbox" value="1" id="non_taxable">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
 
         </div>
@@ -101,6 +117,14 @@
                 @endforelse
                 <option value="Add Customer">
             </datalist>
+            <div style="display: none" id="displayCashCustomerInput">
+                <div class="mb-3 row">
+                    <label for="" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control cashInput" name="customer_name">
+                    </div>
+                </div>
+            </div>
             <div style="display: none" id="displayCustomerInput">
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label">Name</label>
@@ -209,7 +233,7 @@
                 $('#gehl').val(totalAmount * (gehl / 100));
                 $('#covid19').val(totalAmount * (covid19 / 100));
                 $('#vat').val(subTotal * (vat / 100));
-                $('#without_tax_amount').val(totalAmount);
+                $('#without_tax_amount').val(totalAmount.toFixed(2));
             }
 
             $('.getTotalAmount').delegate('.quantity', 'keyup', function(){
@@ -287,9 +311,16 @@
                 if(cus === 'Add Customer'){
                     $("#displayCustomerInput").css("display","block");
                     $(".cusInput").attr("required", true);
-                } else {
+                } else if(cus === 'Cash Customer'){
+                    $("#displayCashCustomerInput").css("display","block");
+                    $(".cashInput").attr("required", true);
+                }
+                else {
                     $("#displayCustomerInput").css("display","none");
                     $(".cusInput").attr("required", false);
+
+                    $("#displayCashCustomerInput").css("display","none");
+                    $(".cashInput").attr("required", false);
                 }
 
             });

@@ -1,81 +1,108 @@
 @props(['transaction', 'transaction_details', 'downloadable', 'payment', 'type'])
 
 <div id = "main">
-    @if($downloadable == 0)
-        <div class="row">
-            <div class="col-6">
-                <img src="{{ asset('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
+    @php
+        $shop = getShopSettings();
+    @endphp
+    @if (get_logged_user_division_id() !== 42)
+        @if($downloadable == 0)
+            <div class="row">
+                <div class="col-6">
+                    <img src="{{ asset('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
+                </div>
+                <div class="col-6">
+                    @if($type == 'invoice')
+                        <div class="row">
+                            <div class="col-12 pt-4 pb-2"><img src="{{ asset('/dist/assets/img/invoice.png') }}" alt="invoice" width="200" style="float: right"></div>
+                            <div class="col-12"><h5 style="float: right"># {{ $transaction->invoice_no }}</h5></div>
+                        </div>
+                    @else
+                        <div class="row">
+                            <div class="col-12 pt-4 pb-2"><img src="{{ asset('/dist/assets/img/receipt.png') }}" alt="receipt" width="200" style="float: right"></div>
+                            <div class="col-12"><h5 style="float: right; padding-right: 15px"># {{ $payment->receipt_no }}</h5></div>
+                        </div>
+                    @endif
+                </div>
             </div>
-            <div class="col-6">
+        @else
+            <table class="table table-bordered">
                 @if($type == 'invoice')
-                    <div class="row">
-                        <div class="col-12 pt-4 pb-2"><img src="{{ asset('/dist/assets/img/invoice.png') }}" alt="invoice" width="200" style="float: right"></div>
-                        <div class="col-12"><h5 style="float: right"># {{ $transaction->invoice_no }}</h5></div>
-                    </div>
+                    <tr>
+                        <td rowspan="2" style="text-align: left; padding: 0">
+                            <img src="{{ public_path('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
+                        </td>
+                        <td style="text-align: left; padding-right: 0"><img src="{{ public_path('/dist/assets/img/invoice.png') }}" alt="invoice" width="200" style="float: right"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; padding-right: 20px;"><h5># {{ $transaction->invoice_no}}</h5></td>
+                    </tr>
                 @else
-                    <div class="row">
-                        <div class="col-12 pt-4 pb-2"><img src="{{ asset('/dist/assets/img/receipt.png') }}" alt="receipt" width="200" style="float: right"></div>
-                        <div class="col-12"><h5 style="float: right; padding-right: 15px"># {{ $payment->receipt_no }}</h5></div>
-                    </div>
+                    <tr>
+                        <td rowspan="2" style="text-align: left; padding: 0">
+                            <img src="{{ public_path('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
+                        </td>
+                        <td style="text-align: left; padding-right: 0"><img src="{{ public_path('/dist/assets/img/receipt.png') }}" alt="receipt" width="200" style="float: right"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; padding-right: 20px;"><h5># {{ $payment->receipt_no}}</h5></td>
+                    </tr>
                 @endif
+            </table>
+        @endif
+
+        <div>
+            <div><b>{{ $shop->display_name }}</b><br>
+                {{ $shop->address }} <br>
+                {{ $shop->phone1 }} <br>
+                @if(!empty($shop->phone2))
+                    {{ $shop->phone2 }} <br>
+                @endif
+                {{ $shop->email }}
+            </div>
+        </div>
+        <br>
+        <div>
+            <label>Bill To</label>
+            <label style="float: right">Date {{ $transaction->transaction_date }}</label>
+
+            <div><b>{{ $transaction->customer_name->name }}</b><br>
+                {{ $transaction->customer_name->address }} <br>
+                {{ $transaction->customer_name->location }} <br>
+                {{ $transaction->customer_name->phone }} <br>
+                {{ $transaction->customer_name->email }}
             </div>
         </div>
     @else
-        <table class="table table-bordered">
+        @php
+            $payment = \App\Models\TransactionPayment::where('transaction_id', $transaction->transaction_id)->first();
+        @endphp
+        <div style="text-align: center">
+            <img src="{{ asset('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="60">
+        </div>
+        <div style="text-align: center">
+            <label style="font-weight: bolder; font-size: 20px">THE APOSTOLIC CHURCH-GHANA</label><br>
+            <label>{{ $shop->display_name }}</label><br>
+            <label>{{ $shop->address }} | Tel: {{ $shop->phone1 }} | Email: {{ $shop->email }}</label>
+        </div>
+        <div style="float: left;">
+            <label style="font-weight: bolder; font-size: 30px; visibility: hidden">Receipt</label><br>
+            <label>Date: {{ ($type == 'invoice') ? $transaction->transaction_date : $payment->payment_date }}</label><br>
+            <label><b>Customer Name:</b> {{ ($transaction->customer_name->name == 'Cash Customer') ? $transaction->customer_name_store : $transaction->customer_name->name }}</label>
+        </div>
+        <div style="float: right;">
             @if($type == 'invoice')
-                <tr>
-                    <td rowspan="2" style="text-align: left; padding: 0">
-                        <img src="{{ public_path('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
-                    </td>
-                    <td style="text-align: left; padding-right: 0"><img src="{{ public_path('/dist/assets/img/invoice.png') }}" alt="invoice" width="200" style="float: right"></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right; padding-right: 20px;"><h5># {{ $transaction->invoice_no}}</h5></td>
-                </tr>
+                <label style="font-weight: bolder; font-size: 30px">Invoice</label><br>
+                <label>{{ $transaction->invoice_no }}</label><br>
             @else
-                <tr>
-                    <td rowspan="2" style="text-align: left; padding: 0">
-                        <img src="{{ public_path('/storage/'.getShopSettings()->text_logo) }}" alt="logo" width="150">
-                    </td>
-                    <td style="text-align: left; padding-right: 0"><img src="{{ public_path('/dist/assets/img/receipt.png') }}" alt="receipt" width="200" style="float: right"></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right; padding-right: 20px;"><h5># {{ $payment->receipt_no}}</h5></td>
-                </tr>
+                <label style="font-weight: bolder; font-size: 30px">Receipt</label><br>
+                <label>{{ $payment->receipt_no }}</label><br>
+                <label><b>Payment Mode:</b> {{ \App\Models\SystemLOV::find($payment->payment_method)->name }}</label>
             @endif
-        </table>
+        </div>
+
     @endif
 
     <div>
-        @php
-            $shop = getShopSettings();
-        @endphp
-        <div><b>{{ $shop->shop_name }}</b><br>
-            {{ $shop->address }} <br>
-            {{ $shop->phone1 }} <br>
-            @if(!empty($shop->phone2))
-                {{ $shop->phone2 }} <br>
-            @endif
-            {{ $shop->email }}
-        </div>
-    </div>
-    <br>
-    <div>
-        <label>Bill To</label>
-        <label style="float: right">Date {{ $transaction->transaction_date }}</label>
-
-        <div><b>{{ $transaction->customer_name->name }}</b><br>
-            {{ $transaction->customer_name->address }} <br>
-            {{ $transaction->customer_name->location }} <br>
-            {{ $transaction->customer_name->phone }} <br>
-            {{ $transaction->customer_name->email }}
-        </div>
-    </div>
-
-    <br>
-
-    <div>
-        {{-- <div align = "center"><u><b>Your Bill</b></u></div> --}}
         <div>
             <table width="100%">
                 <thead>
@@ -169,5 +196,10 @@
                 </tfoot>
             </table>
         </div>
+
+        @if (get_logged_user_division_id() === 42)
+            <p><b>Cashier:</b> {{ get_logged_staff_name($transaction->updated_by_id) }}</p>
+        @endif
+
     </div>
 </div>

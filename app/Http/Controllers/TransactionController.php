@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\StoresTransactionHelper;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -20,9 +21,9 @@ class TransactionController extends Controller
     public function transactionsIndex()
     {
         if(get_logged_in_user_id() === 1){
-            $data['transactions'] = VWTransactions::orderByDesc('transaction_date')->get();//paginate(30);
+            $data['transactions'] = VWTransactions::orderByDesc('transaction_id')->get();//paginate(30);
         } else {
-            $data['transactions'] = VWTransactions::where('division', get_logged_user_division_id())->orderByDesc('transaction_date')->get();//paginate(30);
+            $data['transactions'] = VWTransactions::where('division', get_logged_user_division_id())->orderByDesc('transaction_id')->get();//paginate(30);
         }
         return view('transactions.transactions', $data);
     }
@@ -53,7 +54,7 @@ class TransactionController extends Controller
             $cus = Customer::where('name', $request->customer)->first();
         }
 
-        $count = DB::table('transactions')->count() + 1;
+        $count = DB::table('transactions')->where('division', get_logged_user_division_id())->count() + 1;
 
         $transaction = Transaction::firstOrCreate([
             'invoice_no' => invoice_num($count, 10, "TAC-"),
@@ -68,6 +69,7 @@ class TransactionController extends Controller
             'vat' => ($request->taxable == 1) ? $request->vat : 0,
             'transaction_amount' => $request->total_amount,
             'discount' => $request->discount,
+            'customer_name_store' => $request->customer_name,
             'division' => get_logged_user_division_id(),
             'created_by_id' => get_logged_in_user_id(),
             'updated_by_id' => get_logged_in_user_id(),
@@ -81,7 +83,7 @@ class TransactionController extends Controller
                 'quantity' => $request->quantity[$i],
                 'unit_price' => $request->unit_price[$i],
                 'amount' => $request->amount[$i],
-                'product_description' => $request->product_description[$i],
+                'product_description' => (!empty($request->product_description[$i])) ? $request->product_description[$i] : null,
                 'division' => get_logged_user_division_id(),
                 'created_by_id' => get_logged_in_user_id(),
                 'updated_by_id' => get_logged_in_user_id(),
@@ -89,6 +91,18 @@ class TransactionController extends Controller
         }
 
         TransactionDiscountHelper::transactionDiscount($transaction);
+
+       // Stores Receipt print
+        if(get_logged_user_division_id() === 42){
+            if(!$request->has('checkbox')){
+                $payment = StoresTransactionHelper::transactionStore($transaction, $request->payment_method);
+
+                return "<script>
+                    window.open('/invoice/$payment->id/receipt','','left=0,top=0,width=850,height=477,toolbar=0,scrollbars=0,status =0');
+                    window.location.href = '/transactions';
+                </script>";
+            }
+        }
 
         return redirect(route('transactions', absolute: false))->with('success', 'Transaction Created Successfully!!!');
     }
@@ -141,7 +155,9 @@ class TransactionController extends Controller
             'covid19' => ($request->taxable == 1) ? $request->covid19 : 0,
             'vat' => ($request->taxable == 1) ? $request->vat : 0,
             'transaction_amount' => $request->total_amount,
+            'product_description' => (!empty($request->product_description)) ? $request->product_description : null,
             'discount' => $request->discount,
+            'customer_name_store' => $request->customer_name,
             'division' => get_logged_user_division_id(),
             'updated_by_id' => get_logged_in_user_id(),
         ]);
@@ -165,6 +181,16 @@ class TransactionController extends Controller
         }
 
         TransactionDiscountHelper::transactionDiscount($transaction);
+
+        // Stores Receipt print
+        if(get_logged_user_division_id() === 42){
+            $payment = StoresTransactionHelper::transactionStore($transaction);
+
+            return "<script>
+                window.open('/invoice/$payment->id/receipt','','left=0,top=0,width=850,height=477,toolbar=0,scrollbars=0,status =0');
+                window.location.href = '/transactions';
+            </script>";
+        }
 
         return redirect(route('transactions', absolute: false))->with('success', 'Transaction Updated Successfully!!!');
     }
@@ -197,9 +223,9 @@ class TransactionController extends Controller
     public function paymentsIndex()
     {
         if(get_logged_in_user_id() === 1){
-            $data['payments'] = TransactionPayment::orderByDesc('payment_date')->get();//paginate(30);
+            $data['payments'] = TransactionPayment::orderByDesc('transaction_id')->get();//paginate(30);
         } else {
-            $data['payments'] = TransactionPayment::where('division', get_logged_user_division_id())->orderByDesc('payment_date')->get();//paginate(30);
+            $data['payments'] = TransactionPayment::where('division', get_logged_user_division_id())->orderByDesc('transaction_id')->get();//paginate(30);
         }
         return view('transactions.payments', $data);
     }
@@ -212,7 +238,8 @@ class TransactionController extends Controller
             'paid_amount' => ['required'],
         ]);
 
-        $count = DB::table('transaction_payments')->count() + 1;
+        $division = (!empty($request->division)) ? $request->division : get_logged_user_division_id();
+        $count = DB::table('transaction_payments')->where('division', $division)->count() + 1;
 
         foreach ($request['transaction_id'] as $i => $transaction_id) {
             $transaction = VWTransactions::find($transaction_id);
@@ -230,7 +257,7 @@ class TransactionController extends Controller
                     'balance' => floatval($transaction->balance - $request['paid_amount'][$i]),
                     'payment_method' => $request->payment_method,
                     'paid_balance' => $transaction->balance,
-                    'division' => (!empty($request->division)) ? $request->division : get_logged_user_division_id(),
+                    'division' => $division,
                     'created_by_id' => get_logged_in_user_id(),
                     'updated_by_id' => get_logged_in_user_id(),
                 ]);

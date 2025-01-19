@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banking;
 use App\Models\Customer;
 use App\Models\Financial;
 use App\Models\ProductPrice;
@@ -57,7 +58,13 @@ class FormsEditController extends Controller
 
             case 'editProduct':
                 $data['product'] = Products::find($id);
-                $data['type'] = SystemLOV::where('category_id', 8)->get();
+
+                if (get_logged_user_division_id() === 42){
+                    $data['type'] = SystemLOV::where('category_id', 16)->get();
+                } else {
+                    $data['type'] = SystemLOV::where('category_id', 8)->get();
+                }
+
                 if(get_logged_in_user_id() === 1){
                     $data['sub_categories'] = ProductSubCategory::select('sub_category_id as id', 'name')->orderBy('name')->get();
                 } else {
@@ -76,9 +83,9 @@ class FormsEditController extends Controller
             case 'editRestockProduct':
                 $data['restock'] = RestockProduct::find($id);
                 if(get_logged_in_user_id() === 1){
-                    $data['items'] = Products::select('product_id as id', 'name')->where('type', 20)->get();
+                    $data['items'] = Products::select('product_id as id', 'name')->get();
                 } else {
-                    $data['items'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->where('type', 20)->get();
+                    $data['items'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->get();
                 }
                 return view('forms.create.create_restock_product', $data);
 
@@ -199,6 +206,10 @@ class FormsEditController extends Controller
                 $data['purchase_order'] = PurchaseOrder::find($id);
                 $data['suppliers'] = Supplier::select('supplier_name as name')->orderBy('supplier_name')->get();
                 return view('forms.create.create_purchase_order', $data);
+
+            case 'editSalesBanking':
+                $data['sale'] = Banking::find($id);
+                return view('forms.create.create_sales_banking', $data);
 
             default:
                 return "No form Selected";
