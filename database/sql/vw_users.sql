@@ -17,7 +17,7 @@ SELECT id,
        created_at,
        updated_at,
        deleted_at
-FROM users;
+FROM users
 WHERE deleted_at IS NULL;
 
 ALTER TABLE public.vw_users

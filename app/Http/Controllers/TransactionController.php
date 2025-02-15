@@ -93,7 +93,7 @@ class TransactionController extends Controller
         TransactionDiscountHelper::transactionDiscount($transaction);
 
        // Stores Receipt print
-        if(get_logged_user_division_id() === 42){
+        if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42){
             if(!$request->has('checkbox')){
                 $payment = StoresTransactionHelper::transactionStore($transaction, $request->payment_method);
 
@@ -183,7 +183,7 @@ class TransactionController extends Controller
         TransactionDiscountHelper::transactionDiscount($transaction);
 
         // Stores Receipt print
-        if(get_logged_user_division_id() === 42){
+        if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42){
             $payment = StoresTransactionHelper::transactionStore($transaction);
 
             return "<script>

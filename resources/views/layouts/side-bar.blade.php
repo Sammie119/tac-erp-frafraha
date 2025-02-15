@@ -50,7 +50,7 @@
                                 <x-menu-item :route="'materials'">Materials</x-menu-item>
                             @endif
 
-                            @if(get_logged_user_division_id() === 42)
+                            @if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42)
                                 <x-menu-item :route="'stores_transfer'">Stock Transfer</x-menu-item>
                             @endif
 
@@ -78,7 +78,7 @@
                     >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::VIEWINVOICE->value)
-                                <x-menu-item :route="'transactions'">{{ get_logged_user_division_id() === 42 ? 'Sales' : 'Generate Invoice' }}</x-menu-item>
+                                <x-menu-item :route="'transactions'">{{ (get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42) ? 'Sales' : 'Generate Invoice' }}</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWPAYMENT->value)
                                 <x-menu-item :route="'payments'">Make Payment</x-menu-item>

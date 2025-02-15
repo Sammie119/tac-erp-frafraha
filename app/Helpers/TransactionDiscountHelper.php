@@ -6,7 +6,7 @@ class TransactionDiscountHelper {
     public static function transactionDiscount($trans)
     {
         if($trans->discount > 0) {
-            if(get_logged_user_division_id() !== 42){
+            if(get_logged_user_division_parent_id() === 0){
                 $transaction = Transaction::find($trans->transaction_id);
 
                 $discounted_amount = $transaction->without_tax_amount - $transaction->discount;

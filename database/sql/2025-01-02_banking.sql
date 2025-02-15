@@ -18,7 +18,7 @@ ALTER SEQUENCE public.bankings_id_seq
 
 -- Table: public.bankings
 
--- DROP TABLE IF EXISTS public.bankings;
+DROP TABLE IF EXISTS public.bankings;
 
 CREATE TABLE IF NOT EXISTS public.bankings
 (

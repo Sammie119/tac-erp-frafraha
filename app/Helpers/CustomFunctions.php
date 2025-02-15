@@ -45,6 +45,13 @@ if (!function_exists("get_logged_user_division_id")) {
     }
 }
 
+if (!function_exists("get_logged_user_division_parent_id")) {
+    function get_logged_user_division_parent_id(): int
+    {
+        return SystemLOV::find(Auth::user()->division)->parent_id;
+    }
+}
+
 if (!function_exists("get_logged_user_stores_division_ids")) {
     function get_logged_user_stores_division_ids(): array
     {

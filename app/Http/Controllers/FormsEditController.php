@@ -59,7 +59,7 @@ class FormsEditController extends Controller
             case 'editProduct':
                 $data['product'] = Products::find($id);
 
-                if (get_logged_user_division_id() === 42){
+                if (get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42){
                     $data['type'] = SystemLOV::where('category_id', 16)->get();
                 } else {
                     $data['type'] = SystemLOV::where('category_id', 8)->get();

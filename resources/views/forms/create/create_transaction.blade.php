@@ -17,7 +17,7 @@
             </div>
 
             <div class="form-group col-md-4 px-5 ">
-                @if(get_logged_user_division_id() !== 42)
+                @if(get_logged_user_division_parent_id() === 0)
                     <label for="recipient-name" class="control-label mb-2">Invoice Type</label>
                     <div class="row">
                         <div class="form-check col-md-6">

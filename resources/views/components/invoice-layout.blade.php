@@ -4,7 +4,7 @@
     @php
         $shop = getShopSettings();
     @endphp
-    @if (get_logged_user_division_id() !== 42)
+    @if (get_logged_user_division_parent_id() === 0)
         @if($downloadable == 0)
             <div class="row">
                 <div class="col-6">
@@ -197,7 +197,7 @@
             </table>
         </div>
 
-        @if (get_logged_user_division_id() === 42)
+        @if (get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42)
             <p><b>Cashier:</b> {{ get_logged_staff_name($transaction->updated_by_id) }}</p>
         @endif
 
