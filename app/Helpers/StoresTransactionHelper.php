@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 class StoresTransactionHelper {
     public static function transactionStore($transaction, $payment_method)
     {
-        $count = DB::table('transaction_payments')->where('division', 42)->count() + 1;
+        $id = get_logged_user_division_id();
+        $count = DB::table('transaction_payments')->where('division', $id)->count() + 1;
 
         $transaction = VWTransactions::find($transaction->transaction_id);
 
@@ -21,7 +22,7 @@ class StoresTransactionHelper {
             $payment = TransactionPayment::firstOrCreate([
                 'transaction_id' => $transaction->transaction_id,
                 'invoice_no' => $transaction->invoice_no,
-                'payment_date' => date('Y-m-d'),
+                'payment_date' => $transaction->transaction_date,
                 'amount_paid' => $transaction->without_tax_amount,
             ],[
                 'receipt_no' => invoice_num($count, 10, "TAC-"),

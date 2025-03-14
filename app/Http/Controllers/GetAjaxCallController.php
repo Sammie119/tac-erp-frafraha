@@ -11,7 +11,8 @@ class GetAjaxCallController extends Controller
 {
     public function getSearchProduct(Request $request)
     {
-        $product = Products::where("name", $request->search)->first();
+        $user_in_id = get_logged_user_division_id();
+        $product = Products::where(["name" => $request->search, 'division' => $user_in_id])->first();
 
         if($product){
             $results = [

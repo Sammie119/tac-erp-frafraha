@@ -157,6 +157,7 @@
                     </div>
                 </div>
             </div>
+            <input type="date" name="transaction_date" max="{{ date('Y-m-d') }}" value="{{ isset($transaction) ? $transaction->transaction_date : date('Y-m-d') }}" class="form-control form-control-border mb-3" required>
         </div>
         <div class="col-6">
             <table class="table table-borderless">

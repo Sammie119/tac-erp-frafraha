@@ -232,9 +232,19 @@ if(!function_exists("getCategoryName")){
     function getCategoryName($id, $type = 'Category')
     {
         if($type == 'Category'){
-            $category = SystemLOV::find($id)->name;
+            $category = SystemLOV::find($id);
+            if($category){
+                return $category->name;
+            } else {
+                $category = '';
+            }
         } else {
-            $category = ProductSubCategory::find($id)->name;
+            $category = ProductSubCategory::find($id);
+            if($category){
+                return $category->name;
+            } else {
+                $category = '';
+            }
         }
         return $category;
     }
