@@ -116,6 +116,7 @@
                     <option value="No Data Found">
                 @endforelse
                 <option value="Add Customer">
+                @if(get_logged_user_division_parent_id() !== 0) <option value="Cash Customer"> @endif
             </datalist>
             <div style="display: none" id="displayCashCustomerInput">
                 <div class="mb-3 row">
