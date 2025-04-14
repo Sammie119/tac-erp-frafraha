@@ -30,7 +30,7 @@ class StoresTransactionHelper {
                 'balance' => 0.00,
                 'payment_method' => $payment_method,
                 'paid_balance' => $transaction->without_tax_amount,
-                'division' => 42,
+                'division' => get_logged_user_division_id(),
                 'created_by_id' => get_logged_in_user_id(),
                 'updated_by_id' => get_logged_in_user_id(),
             ]);

@@ -9,7 +9,8 @@
         <input type="number" class="form-control bg-white px-0 quantity" name="quantity[]" style="text-align: center;" required>
     </div>
     <div class="form-group col-1">
-        <select class="form-control bg-white px-0 price" name="unit_price[]" style="text-align: center;"><option selected>${data.price}</option></select>
+        <input type="number" step="0.01" min="0.1" class="form-control bg-white px-0 price" value="${data.price}" name="unit_price[]" style="text-align: center;" required>
+{{--        <select class="form-control bg-white px-0 price" name="unit_price[]" style="text-align: center;"><option selected>${data.price}</option></select>--}}
     </div>
     <div class="form-group col-2">
         <input type="number" min="0" step="0.01" class="form-control bg-white sub_total" name="amount[]" readonly>

@@ -59,7 +59,7 @@ class TransactionController extends Controller
         $transaction = Transaction::firstOrCreate([
             'invoice_no' => invoice_num($count, 10, "TAC-"),
             'customer_id' => $cus->id,
-            'transaction_date' => date('Y-m-d'),
+            'transaction_date' => $request->transaction_datedate,
         ],[
             'without_tax_amount' => $request->without_tax_amount,
             'taxable' => $request->taxable,
