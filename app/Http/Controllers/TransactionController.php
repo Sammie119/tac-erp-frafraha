@@ -9,9 +9,16 @@ use App\Models\TransactionDetail;
 use App\Models\TransactionPayment;
 use App\Models\VWTransactions;
 use App\Helpers\TransactionDiscountHelper;
+use App\Pipelines\TransactionsPipe\CustomerCreate;
+use App\Pipelines\TransactionsPipe\ProcessPayment;
+use App\Pipelines\TransactionsPipe\StoreTransaction;
+use App\Pipelines\TransactionsPipe\TransactionDetails;
+use App\Pipelines\TransactionsPipe\TransactionDiscount;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Pipeline;
 
 class TransactionController extends Controller
 {
@@ -30,6 +37,9 @@ class TransactionController extends Controller
 
     public function transactionsStore(Request $request)
     {
+//        $sms = SmsService::sendSms('24837616', 'Testing SMS Alert to a Foreign Number. Thank you');
+//
+//        dd('SMS', $sms);
 //        dd($request->all());
         $request->validate([
             'taxable' => ['required'],
@@ -37,60 +47,70 @@ class TransactionController extends Controller
             'customer' => ['required'],
         ]);
 
-        if($request->customer === 'Add Customer'){
-            $cus = Customer::firstOrCreate(
-                [
-                    'phone' => $request->phone,
-                    'division' => get_logged_user_division_id(),
-                ],[
-                    'name' => $request->name,
-                    'address' => $request->address,
-                    'email' => $request->email,
-                    'location' => $request->location,
-                    'created_by_id' => get_logged_in_user_id(),
-                    'updated_by_id' => get_logged_in_user_id(),
-                ]);
-        } else {
-            $cus = Customer::where('name', $request->customer)->first();
-        }
+        $transaction = Pipeline::send($request->all())->through(
+            [
+                CustomerCreate::class,
+                StoreTransaction::class,
+                TransactionDetails::class,
+                TransactionDiscount::class,
+                ProcessPayment::class,
+            ]
+        )->thenReturn();
 
-        $count = DB::table('transactions')->where('division', get_logged_user_division_id())->count() + 1;
+//        if($request->customer === 'Add Customer'){
+//            $cus = Customer::firstOrCreate(
+//                [
+//                    'phone' => $request->phone,
+//                    'division' => get_logged_user_division_id(),
+//                ],[
+//                    'name' => $request->name,
+//                    'address' => $request->address,
+//                    'email' => $request->email,
+//                    'location' => $request->location,
+//                    'created_by_id' => get_logged_in_user_id(),
+//                    'updated_by_id' => get_logged_in_user_id(),
+//                ]);
+//        } else {
+//            $cus = Customer::where('name', $request->customer)->first();
+//        }
 
-        $transaction = Transaction::firstOrCreate([
-            'invoice_no' => invoice_num($count, 10, "TAC-"),
-            'customer_id' => $cus->id,
-            'transaction_date' => $request->transaction_datedate,
-        ],[
-            'without_tax_amount' => $request->without_tax_amount,
-            'taxable' => $request->taxable,
-            'nhil' => ($request->taxable == 1) ? $request->nhil : 0,
-            'gehl' => ($request->taxable == 1) ? $request->gehl : 0,
-            'covid19' => ($request->taxable == 1) ? $request->covid19 : 0,
-            'vat' => ($request->taxable == 1) ? $request->vat : 0,
-            'transaction_amount' => $request->total_amount,
-            'discount' => $request->discount,
-            'customer_name_store' => $request->customer_name,
-            'division' => get_logged_user_division_id(),
-            'created_by_id' => get_logged_in_user_id(),
-            'updated_by_id' => get_logged_in_user_id(),
-        ]);
+//        $count = DB::table('transactions')->where('division', get_logged_user_division_id())->count() + 1;
+//
+//        $transaction = Transaction::firstOrCreate([
+//            'invoice_no' => invoice_num($count, 10, "TAC-"),
+//            'customer_id' => $cus->id,
+//            'transaction_date' => $request->transaction_datedate,
+//        ],[
+//            'without_tax_amount' => $request->without_tax_amount,
+//            'taxable' => $request->taxable,
+//            'nhil' => ($request->taxable == 1) ? $request->nhil : 0,
+//            'gehl' => ($request->taxable == 1) ? $request->gehl : 0,
+//            'covid19' => ($request->taxable == 1) ? $request->covid19 : 0,
+//            'vat' => ($request->taxable == 1) ? $request->vat : 0,
+//            'transaction_amount' => $request->total_amount,
+//            'discount' => $request->discount,
+//            'customer_name_store' => $request->customer_name,
+//            'division' => get_logged_user_division_id(),
+//            'created_by_id' => get_logged_in_user_id(),
+//            'updated_by_id' => get_logged_in_user_id(),
+//        ]);
 
-        foreach ($request->product_id as $i => $product) {
+//        foreach ($request->product_id as $i => $product) {
+//
+//            TransactionDetail::create([
+//                'transaction_id' => $transaction->transaction_id,
+//                'product_id' => $product,
+//                'quantity' => $request->quantity[$i],
+//                'unit_price' => $request->unit_price[$i],
+//                'amount' => $request->amount[$i],
+//                'product_description' => (!empty($request->product_description[$i])) ? $request->product_description[$i] : null,
+//                'division' => get_logged_user_division_id(),
+//                'created_by_id' => get_logged_in_user_id(),
+//                'updated_by_id' => get_logged_in_user_id(),
+//            ]);
+//        }
 
-            TransactionDetail::create([
-                'transaction_id' => $transaction->transaction_id,
-                'product_id' => $product,
-                'quantity' => $request->quantity[$i],
-                'unit_price' => $request->unit_price[$i],
-                'amount' => $request->amount[$i],
-                'product_description' => (!empty($request->product_description[$i])) ? $request->product_description[$i] : null,
-                'division' => get_logged_user_division_id(),
-                'created_by_id' => get_logged_in_user_id(),
-                'updated_by_id' => get_logged_in_user_id(),
-            ]);
-        }
-
-        TransactionDiscountHelper::transactionDiscount($transaction);
+//        TransactionDiscountHelper::transactionDiscount($transaction);
 
        // Stores Receipt print
         if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42){
@@ -184,7 +204,7 @@ class TransactionController extends Controller
 
         // Stores Receipt print
         if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42){
-            $payment = StoresTransactionHelper::transactionStore($transaction);
+            $payment = StoresTransactionHelper::transactionStore($transaction, $request->payment_method);
 
             return "<script>
                 window.open('/invoice/$payment->id/receipt','','left=0,top=0,width=850,height=477,toolbar=0,scrollbars=0,status =0');

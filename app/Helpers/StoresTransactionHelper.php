@@ -13,7 +13,7 @@ class StoresTransactionHelper {
         $id = get_logged_user_division_id();
         $count = DB::table('transaction_payments')->where('division', $id)->count() + 1;
 
-        $transaction = VWTransactions::find($transaction->transaction_id);
+        $transaction = VWTransactions::find($transaction['transaction_id']);
 
 //        dd($transaction);
 

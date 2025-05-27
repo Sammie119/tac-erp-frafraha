@@ -5,11 +5,12 @@ use App\Models\Transaction;
 class TransactionDiscountHelper {
     public static function transactionDiscount($trans)
     {
-        if($trans->discount > 0) {
-            if(get_logged_user_division_parent_id() === 0){
-                $transaction = Transaction::find($trans->transaction_id);
+        if($trans['discount'] > 0) {
+            $transaction = Transaction::find($trans['transaction_id']);
 
-                $discounted_amount = $transaction->without_tax_amount - $transaction->discount;
+            $discounted_amount = $transaction->without_tax_amount - $transaction->discount;
+
+            if(get_logged_user_division_parent_id() === 0){
 
                 $nhil = ($discounted_amount * (getTaxValue('nhil') / 100));
                 $gehl = ($discounted_amount * (getTaxValue('gehl') / 100));
@@ -31,9 +32,6 @@ class TransactionDiscountHelper {
                 ]);
             }
             else {
-                $transaction = Transaction::find($trans->transaction_id);
-
-                $discounted_amount = $transaction->without_tax_amount - $transaction->discount;
 
                 $transaction->update([
                     'without_tax_amount' => $discounted_amount,
