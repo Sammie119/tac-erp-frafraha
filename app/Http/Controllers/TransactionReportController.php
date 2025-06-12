@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\TransactionPayment;
+use App\Models\VWTransactions;
 use Illuminate\Http\Request;
 
 class TransactionReportController extends Controller
@@ -19,10 +21,17 @@ class TransactionReportController extends Controller
             'to_date' => ['required'],
         ]);
 
-        $data['data'] = TransactionPayment::selectRaw("updated_by_id, sum(amount_paid) as amount")->where('division', get_logged_user_division_id())
+        $data['data_payment'] = TransactionPayment::selectRaw("updated_by_id, sum(amount_paid) as amount")->where('division', get_logged_user_division_id())
             ->whereBetween('payment_date', [$request->from_date, $request->to_date])
             ->groupBy('updated_by_id')->get();
 
+        $data['data'] = Transaction::where('division', get_logged_user_division_id())->whereBetween('transaction_date', [$request->from_date, $request->to_date])
+            ->get();
+
+        $data['date'] = [
+            'from' => $request->from_date,
+            'to' => $request->to_date,
+        ];
         $data['report'] = 'Daily Income Report';
         $data['header'] = 'Daily Income Report';
 
@@ -36,6 +45,33 @@ class TransactionReportController extends Controller
             'to_date' => ['required'],
         ]);
 
-        dd($request->all());
+        if(get_logged_user_division_id() === 42){
+            $stores_ids = get_stores_ids(42);
+
+            if($request->location === 'All'){
+                $data['payments'] = TransactionPayment::whereIn('division', $stores_ids)
+                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                    ->orderByDesc('transaction_id')->get();
+            }else {
+                $data['payments'] = TransactionPayment::where('division', $request->location)
+                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                    ->orderByDesc('transaction_id')->get();
+            }
+
+        } else {
+            $data['payments'] = TransactionPayment::where('division', get_logged_user_division_id())
+                ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                ->orderByDesc('transaction_id')->get();
+        }
+
+        $data['date'] = [
+            'from' => $request->from_date,
+            'to' => $request->to_date,
+        ];
+        $data['report'] = 'Receipt Report';
+        $data['header'] = 'Receipt Report';
+
+        return view('reports.print_report', $data);
+
     }
 }

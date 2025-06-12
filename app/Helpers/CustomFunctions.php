@@ -1,10 +1,13 @@
 <?php
 
 use App\Enums\RolesEnum;
+use App\Models\Customer;
 use App\Models\ProductSubCategory;
 use App\Models\Setups;
 use App\Models\SystemLOV;
+use App\Models\Transaction;
 use App\Models\VWStaff;
+use App\Models\VWTransactions;
 use App\Models\VWUser;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
@@ -78,6 +81,14 @@ if (!function_exists("get_logged_user_division_name")) {
     function get_logged_user_division_name(): string
     {
         return SystemLOV::find(get_logged_user_division_id())->name;
+
+    }
+}
+
+if (!function_exists("get_division_name")) {
+    function get_division_name($id): string
+    {
+        return SystemLOV::find($id)->name;
 
     }
 }
@@ -247,6 +258,36 @@ if(!function_exists("getCategoryName")){
             }
         }
         return $category;
+    }
+}
+
+if(!function_exists("getCustomerName")){
+    function getCustomerName($transaction_id): string
+    {
+        $record = VWTransactions::find($transaction_id);
+
+        if($record){
+            if($record->customer_name === 'Cash Customer'){
+                $record = Transaction::find($transaction_id);
+                if($record)
+                    return $record->customer_name_store;
+            }
+            return $record->customer_name;
+        }
+        return '';
+    }
+}
+
+if (!function_exists("get_stores_ids")) {
+    function get_stores_ids($id): array
+    {
+        $results = SystemLOV::select('id')->where('parent_id', $id)->pluck('id')->toArray();
+
+        if($results){
+            return $results;
+        }
+
+        return [];
     }
 }
 

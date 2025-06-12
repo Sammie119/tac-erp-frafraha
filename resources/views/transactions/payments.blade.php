@@ -45,7 +45,7 @@
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $payment->invoice_no }}</td>
                                     <td>{{ $payment->receipt_no }}</td>
-                                    <td>{{ $payment->transaction->customer_name }}</td>
+                                    <td>{{ getCustomerName($payment->transaction_id) }}</td>
                                     <td>{{ $payment->paid_balance }}</td>
                                     <td>{{ $payment->amount_paid }}</td>
                                     <td>{{ $payment->balance }}</td>

@@ -14,22 +14,8 @@
 
         <div class="col-md-12">
             <label for="select" class="form-label">{{ __('Shop Location') }}</label>
-{{--            <select class="form-control" name="location" required>--}}
-{{--                <option selected value="All">All</option>--}}
-{{--                <option value="49">Stores - Fafraha</option>--}}
-{{--                <option value="50">Stores - HQ</option>--}}
-{{--            </select>--}}
+            <x-input-datalist :options="$items" :placeholder="'Enter Product'" class="product" :list="'datalistOptions'" autofocus/>
 {{--            <input type="text" name="to_date" id="toDate" >--}}
-        </div>
-        <div class="col-md-12">
-            <x-input-select
-                :options="['All', 'Stores - Fafraha', 'Stores - HQ']"
-                :selected="isset($period) ? $period->status : 0"
-                :values="['All', 49, 50]"
-                :type="1"
-                name="location"
-                required
-            />
         </div>
     </div>
 
