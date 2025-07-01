@@ -17,8 +17,8 @@
         padding-top: 0px;
     }
 
-    #logo-text {
-        font-size: 1.5rem;
+    .logo-text {
+        font-size: 1rem;
         font-weight: bold;
         margin-bottom: 5px;
         margin-top: 0px;
@@ -91,8 +91,10 @@
 <header id="header">
     <img class="center" src="{{ asset('dist/assets/img/tacgh_logo.png') }}" width="100px" alt="TAC_logo">
     <div id="logo" style="padding-top: 10px">
-        <h6 id="logo-text">{{ $header }}</h6>
-        <p style="font-size: 16px; font-weight: bolder">Date Range: {{ $date['from'] }} - {{ $date['to'] }}</p>
+        <h4 style="font-weight: bolder">THE APOSTOLIC CHURCH-GHANA</h4>
+        <h5 style="font-weight: bolder">GENERAL HEADQUARTERS STORES</h5>
+        <h6 class="logo-text">{{ $header }}</h6>
+        <p style="font-size: 16px; font-weight: bolder">DATE RANGE: {{ date_format(date_create($date['from']),"d/m/Y") }} TO {{ date_format(date_create($date['to']),"d/m/Y") }}</p>
     </div>
 </header>
 
@@ -198,54 +200,99 @@
                 <tr>
                     <th>No.</th>
                     <th>Invoice No</th>
-                    <th>Receipt No</th>
+{{--                    <th>Receipt No</th>--}}
                     <th>Customer</th>
-                    <th>Amount</th>
+                    <th>Sub Total</th>
+                    <th>Discount</th>
+                    <th>Total</th>
                     <th>Paid</th>
                     <th>Balance</th>
-                    <th>Status</th>
+                    <th>Payment Method</th>
                     <th>Location</th>
                     <th>Date</th>
                 </tr>
                 </thead>
                 <tbody>
                 @php
+                    $total = 0;
+                    $total_discount = 0;
                     $total_sales = 0;
                     $total_balance = 0;
                     $total_amount = 0;
                 @endphp
-                @foreach ($payments as $key => $payment)
+                @foreach($users as $payments)
                     @php
-                        $total_sales += $payment->amount_paid;
-                        $total_balance += $payment->balance;
-                        $total_amount += $payment->paid_balance;
+                        $u_total = 0;
+                        $u_total_discount = 0;
+                        $u_total_sales = 0;
+                        $u_total_balance = 0;
+                        $u_total_amount = 0;
                     @endphp
+                    <tr>
+                        <th colspan="20" style="text-align: left; border: #000 solid 1.5px; padding: 10px; text-transform: uppercase">
+                            STAFF NAME: {{ get_logged_staff_name($payments[0]->updated_by_id) }}
+                        </th>
+                    </tr>
+                    @foreach ($payments as $key => $payment)
+                        @php
+                            $total += ($payment->total_amount + getDiscount($payment->transaction_id));
+                            $total_discount += getDiscount($payment->transaction_id);
+                            $total_sales += $payment->total_amount;
+                            $total_amount += $payment->amount_paid;
+                            $total_balance += $payment->balance;
 
-                    <tr class="align-middle">
-                        <td>{{ ++$key }}</td>
-                        <td>{{ $payment->invoice_no }}</td>
-                        <td>{{ $payment->receipt_no }}</td>
-                        <td>{{ getCustomerName($payment->transaction_id) }}</td>
-                        <td>{{ $payment->paid_balance }}</td>
-                        <td>{{ $payment->amount_paid }}</td>
-                        <td>{{ $payment->balance }}</td>
-                        <td>{!! getPaymentStatus($payment->transaction->status) !!}</td>
-                        <td>{{ get_division_name($payment->division) }}</td>
-                        <td>{{ $payment->payment_date }}</td>
+                            $u_total += ($payment->total_amount + getDiscount($payment->transaction_id));
+                            $u_total_discount += getDiscount($payment->transaction_id);
+                            $u_total_sales += $payment->total_amount;
+                            $u_total_amount += $payment->amount_paid;
+                            $u_total_balance += $payment->balance;
+                        @endphp
+
+                        <tr class="align-middle">
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $payment->invoice_no }}</td>
+{{--                            <td>{{ $payment->receipt_no }}</td>--}}
+                            <td>{{ getCustomerName($payment->transaction_id) }}</td>
+                            <td>{{ number_format($payment->total_amount + getDiscount($payment->transaction_id), 2) }}</td>
+                            <td>{{ number_format(getDiscount($payment->transaction_id), 2) }}</td>
+                            <td>{{ $payment->total_amount }}</td>
+                            <td>{{ $payment->amount_paid }}</td>
+                            <td>{{ $payment->balance }}</td>
+                            <td>{{ get_division_name($payment->payment_method) }}</td>
+                            <td>{{ get_division_name($payment->division) }}</td>
+                            <td>{{ $payment->payment_date }}</td>
+                        </tr>
+                    @endforeach
+                    <tr style="border: #000 solid 1.5px">
+                        <th colspan="3" style="text-align: center">TOTAL</th>
+                        <th>{{ number_format($u_total, 2) }}</th>
+                        <th>{{ number_format($u_total_discount, 2) }}</th>
+                        <th>{{ number_format($u_total_sales, 2) }}</th>
+                        <th>{{ number_format($u_total_amount, 2) }}</th>
+                        <th>{{ number_format($u_total_balance, 2) }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="20"><br></th>
                     </tr>
                 @endforeach
+                    <tr>
+                        <th colspan="20"><br></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: center">GRAND TOTAL</th>
+                        <th>{{ number_format($total, 2) }}</th>
+                        <th>{{ number_format($total_discount, 2) }}</th>
+                        <th>{{ number_format($total_sales, 2) }}</th>
+                        <th>{{ number_format($total_amount, 2) }}</th>
+                        <th>{{ number_format($total_balance, 2) }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th colspan="4" style="text-align: center">GRAND TOTAL</th>
-                    <th>{{ number_format($total_amount, 2) }}</th>
-                    <th>{{ number_format($total_sales, 2) }}</th>
-                    <th>{{ number_format($total_balance, 2) }}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </tfoot>
             </table>
         </div>
         @break

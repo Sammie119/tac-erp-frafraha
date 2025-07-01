@@ -291,3 +291,15 @@ if (!function_exists("get_stores_ids")) {
     }
 }
 
+if(!function_exists("getDiscount")){
+    function getDiscount($transaction_id): int | float
+    {
+        $record = VWTransactions::find($transaction_id);
+
+        if($record){
+            return $record->discount;
+        }
+        return 0;
+    }
+}
+

@@ -45,31 +45,55 @@ class TransactionReportController extends Controller
             'to_date' => ['required'],
         ]);
 
+        $payments = [];
         if(get_logged_user_division_id() === 42){
             $stores_ids = get_stores_ids(42);
 
             if($request->location === 'All'){
-                $data['payments'] = TransactionPayment::whereIn('division', $stores_ids)
-                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])
-                    ->orderByDesc('transaction_id')->get();
+                $users = TransactionPayment::select('updated_by_id')->whereIn('division', $stores_ids)
+                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])->get()->unique('updated_by_id');
+
+                foreach ($users as $user) {
+                    $payments[] = TransactionPayment::whereIn('division', $stores_ids)
+                        ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                        ->where('updated_by_id', $user->updated_by_id)
+                        ->orderByDesc('transaction_id')->get();
+                    }
+
             }else {
-                $data['payments'] = TransactionPayment::where('division', $request->location)
-                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])
-                    ->orderByDesc('transaction_id')->get();
+                $users = TransactionPayment::select('updated_by_id')->where('division', $request->location)
+                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])->get()->unique('updated_by_id');
+
+                foreach ($users as $user) {
+                    $payments[] = TransactionPayment::where('division', $request->location)
+                        ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                        ->where('updated_by_id', $user->updated_by_id)
+                        ->orderByDesc('transaction_id')->get();
+                    }
             }
 
         } else {
-            $data['payments'] = TransactionPayment::where('division', get_logged_user_division_id())
-                ->whereBetween('payment_date', [$request->from_date, $request->to_date])
-                ->orderByDesc('transaction_id')->get();
+            $users = TransactionPayment::select('updated_by_id')->where('division', get_logged_user_division_id())
+                ->whereBetween('payment_date', [$request->from_date, $request->to_date])->get()->unique('updated_by_id');
+
+            foreach ($users as $user) {
+                $payments[] = TransactionPayment::where('division', get_logged_user_division_id())
+                    ->whereBetween('payment_date', [$request->from_date, $request->to_date])
+                    ->where('updated_by_id', $user->updated_by_id)
+                    ->orderByDesc('transaction_id')->get();
+            }
         }
+
+        $data['users'] = $payments;
 
         $data['date'] = [
             'from' => $request->from_date,
             'to' => $request->to_date,
         ];
         $data['report'] = 'Receipt Report';
-        $data['header'] = 'Receipt Report';
+        $data['header'] = 'DAILY SALES REPORT';
+
+//        dd($data);
 
         return view('reports.print_report', $data);
 

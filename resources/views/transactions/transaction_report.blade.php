@@ -40,18 +40,18 @@
                         </x-card-button>
                     </div>
 
-{{--                    <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->--}}
-{{--                        <x-card-button--}}
-{{--                            modal_title="Product Report"--}}
-{{--                            modal_url="form_report/productReport"--}}
-{{--                            modal_size=""--}}
-{{--                            button_title="Product Report"--}}
-{{--                            button_description="Transactions Report"--}}
-{{--                            button_color="text-bg-info"--}}
-{{--                        >--}}
-{{--                            <i class="bi bi-bar-chart"></i>--}}
-{{--                        </x-card-button>--}}
-{{--                    </div>--}}
+                    <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->
+                        <x-card-button
+                            modal_title="Product Report"
+                            modal_url="form_report/productReport"
+                            modal_size=""
+                            button_title="Product Report"
+                            button_description="Transactions Report"
+                            button_color="text-bg-info"
+                        >
+                            <i class="bi bi-bar-chart"></i>
+                        </x-card-button>
+                    </div>
 
 {{--                    <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->--}}
 {{--                        <x-card-button--}}

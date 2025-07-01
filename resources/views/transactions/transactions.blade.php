@@ -44,7 +44,7 @@
                                 <tr class="align-middle">
                                     <td>{{ ++$key }}</td>
                                     <td nowrap>{{ $transaction->invoice_no }}</td>
-                                    <td>{{ $transaction->customer_name }}</td>
+                                    <td>{{ getCustomerName($transaction->transaction_id) }}</td>
                                     <td nowrap>{{ $transaction->transaction_amount }}</td>
                                     <td nowrap>{{ $transaction->discount }}</td>
                                     <td nowrap>{{ $transaction->amount_paid }}</td>
