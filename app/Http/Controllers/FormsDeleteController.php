@@ -105,6 +105,9 @@ class FormsDeleteController extends Controller
             case 'deleteSalesBanking':
                 $data['sale'] = $id;
                 return view('forms.delete.delete_sales_banking', $data);
+            case 'deleteFinancialPeriod':
+                $data['period'] = $id;
+                return view('forms.delete.delete_financial_period', $data);
 
             default:
                 return "No form Selected";

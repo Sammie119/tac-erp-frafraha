@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banking;
 use App\Models\Customer;
 use App\Models\Financial;
+use App\Models\FinancialPeriod;
 use App\Models\ProductPrice;
 use App\Models\Products;
 use App\Models\ProductSubCategory;
@@ -210,6 +211,10 @@ class FormsEditController extends Controller
             case 'editSalesBanking':
                 $data['sale'] = Banking::find($id);
                 return view('forms.create.create_sales_banking', $data);
+
+            case 'editFinancialPeriod':
+                $data['period'] = FinancialPeriod::find($id);
+                return view('forms.create.create_financial_period', $data);
 
             default:
                 return "No form Selected";

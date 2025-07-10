@@ -99,7 +99,7 @@
 </header>
 
 @switch($report)
-    @case('Daily Income Report')
+    @case('Receipt Report')
         <div class = "data">
             <table class="table border-secondary table-sm mt-2">
                 <thead>
@@ -190,7 +190,7 @@
         </div>
         @break
 
-    @case('Receipt Report')
+    @case('Daily Income Report')
         <div class = "data">
             <table class="table border-secondary table-sm mt-2">
                 <thead>

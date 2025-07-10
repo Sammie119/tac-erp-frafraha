@@ -220,12 +220,20 @@ if(!function_exists("getPaymentStatus")){
 }
 
 if(!function_exists("getOrderStatus")){
-    function getOrderStatus($status = 0)
+    function getOrderStatus($status = 0, $type='Active')
     {
-        $paymentStatus = [
-            0 => "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Pending</span>",
-            1 => "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Received</span>",
-        ][$status] ?? 0;
+        if($type === 'Active') {
+            $paymentStatus = [
+                1 => "<span class='badge bg-primary rounded-pill p-2' style='font-size: 14px'>Active</span>",
+                0 => "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Inactive</span>",
+                2 => "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Completed</span>",
+            ][$status] ?? 0;
+        } else {
+            $paymentStatus = [
+                0 => "<span class='badge bg-danger rounded-pill p-2' style='font-size: 14px'>Pending</span>",
+                1 => "<span class='badge bg-success rounded-pill p-2' style='font-size: 14px'>Received</span>",
+            ][$status] ?? 0;
+        }
 
         return $paymentStatus;
     }
@@ -262,7 +270,7 @@ if(!function_exists("getCategoryName")){
 }
 
 if(!function_exists("getCustomerName")){
-    function getCustomerName($transaction_id): string
+    function getCustomerName($transaction_id): string | null
     {
         $record = VWTransactions::find($transaction_id);
 

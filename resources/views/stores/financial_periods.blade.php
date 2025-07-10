@@ -32,7 +32,7 @@
                             ['name' => 'Start Date', 'nowrap' => 'nowrap', 'width' => '10%'],
                             ['name' => 'End Date', 'nowrap' => 'nowrap', 'width' => '10%'],
                             ['name' => 'Status', 'width' => '9%'],
-                            ['name' => 'Action', 'width' => '16%', 'classes' => 'no-sort']
+                            ['name' => 'Action', 'width' => '10%', 'classes' => 'no-sort']
                         ]">
 
                             @forelse ($periods as $key => $period)
@@ -42,11 +42,12 @@
                                     <td>{{ $period->description }}</td>
                                     <td>{{ $period->start_date }}</td>
                                     <td>{{ $period->end_date }}</td>
-                                    <td>{!! getOrderStatus($period->status) !!}</td>
+                                    <td>{!! getOrderStatus($period->status, 'Active') !!}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="View Purchase Order Detail - {{ $period->order_name }}" data-bs-url="form_view/viewFinancialPeriod/{{ $period->period_id }}" data-bs-size="modal-lg"> View Details</button>
-                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Edit Purchase Order Details" data-bs-url="form_edit/editFinancialPeriod/{{ $period->period_id }}" data-bs-size="modal-lg" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-pencil-square"></i></button>
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Purchase Order Deletion" data-bs-url="form_delete/deleteFinancialPeriod/{{ $period->period_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
+                                        @if($period->status != 2)
+                                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Edit Financial Period" data-bs-url="form_edit/editFinancialPeriod/{{ $period->period_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-pencil-square"></i></button>
+                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Financial Period Deletion" data-bs-url="form_delete/deleteFinancialPeriod/{{ $period->period_id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
