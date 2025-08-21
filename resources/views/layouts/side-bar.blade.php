@@ -134,13 +134,14 @@
 
                 @if(use_roles_sidebar(RolesEnum::STORESMANAGER))
                     <x-main-menu-item
-                        :menu_open="['purchase_orders']"
+                        :menu_open="['purchase_orders', 'financial_periods']"
                         :icon="'house'"
                         :title="'Stores'"
                     >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::PURCHASEORDER->value)
                                 <x-menu-item :route="'purchase_orders'">Purchase Order</x-menu-item>
+                                <x-menu-item :route="'financial_periods'">Financial Periods</x-menu-item>
                             @endcan
                         </ul>
                     </x-main-menu-item>
@@ -148,17 +149,13 @@
 
                 @if(use_roles_sidebar(RolesEnum::USERSMANAGER) || use_roles_sidebar(RolesEnum::SYSTEMADMIN))
                     <x-main-menu-item
-                        :menu_open="['users', 'system_lovs', 'roles', 'permissions', 'setups', 'financial_periods']"
+                        :menu_open="['users', 'system_lovs', 'roles', 'permissions', 'setups']"
                         :icon="'person'"
                         :title="'System Admin'"
                     >
                         <ul class="nav nav-treeview">
                             @if(use_roles_sidebar(RolesEnum::USERSMANAGER))
                                 <x-menu-item :route="'users'">User Management</x-menu-item>
-                            @endif
-
-                            @if(use_roles_sidebar(RolesEnum::SYSTEMADMIN))
-                                <x-menu-item :route="'financial_periods'">Financial Periods</x-menu-item>
                             @endif
 
                             @if(use_roles_sidebar(RolesEnum::SYSTEMADMIN))
