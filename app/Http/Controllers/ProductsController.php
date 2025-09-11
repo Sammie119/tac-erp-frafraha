@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductsExport;
 use App\Models\ProductPrice;
 use App\Models\Products;
 use App\Models\ProductSubCategory;
@@ -9,6 +10,7 @@ use App\Models\RestockProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
 {
@@ -310,6 +312,11 @@ class ProductsController extends Controller
         $product->delete();
 
         return redirect(route('product_pricing', absolute: false))->with('success', 'Product Price Deleted Successfully!!');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProductsExport(get_logged_user_division_id()), 'products_export.xlsx');
     }
 
 }

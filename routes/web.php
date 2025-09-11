@@ -10,7 +10,9 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\RequisitionController;
+use App\Http\Controllers\ReturnedProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SetupsController;
 use App\Http\Controllers\StaffAttendanceController;
@@ -69,6 +71,7 @@ Route::middleware('auth')->group(function () {
             Route::post('price_product_store', 'productPricingStore')->middleware('permission:'.PermissionsEnum::CREATEPRODUCT->value);
             Route::put('price_product_store', 'productPricingUpdate')->middleware('permission:'.PermissionsEnum::UPDATEPRODUCT->value);
             Route::post('delete_price_product', 'productPricingDestroy')->middleware('permission:'.PermissionsEnum::DELETEPRODUCT->value);
+            Route::get('product_export', 'export');
 
             Route::get('materials', 'indexMaterial')->name('materials')->middleware('permission:'.PermissionsEnum::VIEWPRODUCT->value);
 
@@ -124,12 +127,22 @@ Route::middleware('auth')->group(function () {
                 Route::post('delete_sales_banking', 'salesBankingDestroy')->middleware('permission:'.PermissionsEnum::DELETESALESBANKING->value);
                 Route::put('approve_sales_banking/{id}', 'salesBankingApprove')->middleware('permission:'.PermissionsEnum::APPROVESALESBANKING->value);
             });
+
+            Route::controller(ReturnedProductController::class)->group(function () {
+                Route::get('returned_products', 'index')->name('returned_products');
+                Route::post('returned_product_store', 'store')->name('returned_product_store');
+                Route::put('returned_product_store', 'update');
+                Route::post('destroy_returned_product', 'destroy')->name('destroy_returned_product');;
+            });
         });
 
         Route::controller(TransactionReportController::class)->group(function () {
             Route::get('transaction_reports', 'index')->name('transaction_reports');
             Route::post('invoice_report', 'invoiceReport');
             Route::post('daily_income_report', 'dailyIncomeReport');
+            Route::post('product_report', 'productReport');
+            Route::post('products_export_report', 'productsExportReport');
+
 //            Route::put('setup_store', 'update');
         });
 
@@ -191,26 +204,26 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::group(['middleware' => ['role:'.RolesEnum::SYSTEMADMIN->value]], function () {
-        Route::group(['middleware' => ['permission:'.PermissionsEnum::PURCHASEORDER->value]], function () {
-            Route::controller(PurchaseOrderController::class)->group(function () {
-                Route::get('purchase_orders', 'index')->name('purchase_orders');
-                Route::post('purchase_order_store', 'store');
-                Route::put('purchase_order_store', 'update');
-                Route::post('delete_purchase_order', 'destroy');
-            });
+    Route::group(['middleware' => ['permission:'.PermissionsEnum::PURCHASEORDER->value]], function () {
+        Route::controller(PurchaseOrderController::class)->group(function () {
+            Route::get('purchase_orders', 'index')->name('purchase_orders');
+            Route::post('purchase_order_store', 'store');
+            Route::put('purchase_order_store', 'update');
+            Route::post('delete_purchase_order', 'destroy');
         });
 
-        //change permission later
-        Route::group(['middleware' => ['permission:'.PermissionsEnum::PURCHASEORDER->value]], function () {
-            Route::controller(FinancialPeriodController::class)->group(function () {
-                Route::get('financial_periods', 'index')->name('financial_periods');
-                Route::post('financial_period_store', 'store');
-                Route::put('financial_period_store', 'update');
-                Route::post('delete_financial_period', 'destroy');
-            });
+        Route::controller(FinancialPeriodController::class)->group(function () {
+            Route::get('financial_periods', 'index')->name('financial_periods');
+            Route::post('financial_period_store', 'store');
+            Route::put('financial_period_store', 'update');
+            Route::post('delete_financial_period', 'destroy');
         });
 
+        Route::controller(ReceivableController::class)->group(function () {
+            Route::get('receivables', 'index')->name('receivables');
+            Route::post('receivable_store', 'store')->name('receivable_store');
+            Route::post('destroy_receivable', 'destroy')->name('receivable_destroy');
+        });
     });
 
     Route::group(['middleware' => ['role:'.RolesEnum::SYSTEMADMIN->value]], function () {

@@ -14,7 +14,7 @@
             <div class="col-md-12">
                 <div class="card mb-4">
 
-                    <x-datatable.card-header :icon="'products'" :title="get_logged_user_division_id() === 14 ? 'Items List' : 'Products List'">
+                    <x-datatable.card-header :icon="'products'" :title="get_logged_user_division_id() === 14 ? 'Items List' : 'Products List'" export_url="product_export">
                         @can(\App\Enums\PermissionsEnum::CREATEPRODUCT->value)
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Add New Product" data-bs-url="form_create/createProduct" data-bs-size="modal-lg"> <i class="bi bi-plus-lg"></i> Add Product</button>
                         @endcan

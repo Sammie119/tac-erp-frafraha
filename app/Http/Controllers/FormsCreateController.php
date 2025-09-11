@@ -168,6 +168,19 @@ class FormsCreateController extends Controller
                 }
                 return view('forms.create.create_stores_transfer', $data);
 
+            case 'createReceivables':
+                $data['products'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->get();
+                $data['suppliers'] = Supplier::select('supplier_id as id', 'supplier_name as name')->orderBy('supplier_name')->get();
+//                    ->whereIn('division', get_stores_ids(42))->get();
+
+                return view('forms.create.create_receivable', $data);
+
+            case 'createReturnedProduct':
+                $data['products'] = Products::select('product_id as id', 'name')->where('division', get_logged_user_division_id())->get();
+                $data['invoices'] = VWTransactions::select('invoice_no as name')->whereIn('division', get_stores_ids(42))->orderByDesc('invoice_no')->get();
+
+                return view('forms.create.create_returned_products', $data);
+
             default:
                 return "No form Selected";
         }

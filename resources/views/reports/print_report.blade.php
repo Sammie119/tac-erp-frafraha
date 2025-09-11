@@ -85,7 +85,7 @@
 
 </head>
 
-<body style="width: 100%;" >
+<body style="width: 95%; margin-left: 2.5%">
 
 <div id="back"><a href="{{ url()->previous() }}">Back</a></div>
 <header id="header">
@@ -94,7 +94,9 @@
         <h4 style="font-weight: bolder">THE APOSTOLIC CHURCH-GHANA</h4>
         <h5 style="font-weight: bolder">GENERAL HEADQUARTERS STORES</h5>
         <h6 class="logo-text">{{ $header }}</h6>
-        <p style="font-size: 16px; font-weight: bolder">DATE RANGE: {{ date_format(date_create($date['from']),"d/m/Y") }} TO {{ date_format(date_create($date['to']),"d/m/Y") }}</p>
+        @isset($date)
+            <p style="font-size: 16px; font-weight: bolder">DATE RANGE: {{ date_format(date_create($date['from']),"d/m/Y") }} TO {{ date_format(date_create($date['to']),"d/m/Y") }}</p>
+        @endisset
     </div>
 </header>
 
@@ -190,7 +192,7 @@
         </div>
         @break
 
-    @case('Daily Income Report')
+    @case('Income Report')
         <div class = "data">
             <table class="table border-secondary table-sm mt-2">
                 <thead>
@@ -292,6 +294,358 @@
                         <th></th>
                         <th></th>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+        @break
+
+    @case('Detailed Report')
+        <div class = "data">
+            <table class="table border-secondary table-sm mt-2">
+                <thead>
+                {{--                <tr>--}}
+                {{--                    <th colspan="7" style="text-align: center">Detailed Report</th>--}}
+                {{--                </tr>--}}
+                <tr>
+                    <th>No.</th>
+                    <th>Invoice No</th>
+                    {{--                    <th>Receipt No</th>--}}
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>Discount</th>
+                    <th>Total</th>
+                    <th>Paid</th>
+                    <th>Balance</th>
+                    <th>Payment <br> Method</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                @php
+                    $total = 0;
+                    $total_discount = 0;
+                    $total_sales = 0;
+                    $total_balance = 0;
+                    $total_amount = 0;
+                @endphp
+                @foreach($users as $payments)
+                    @php
+                        $u_total = 0;
+                        $u_total_discount = 0;
+                        $u_total_sales = 0;
+                        $u_total_balance = 0;
+                        $u_total_amount = 0;
+                    @endphp
+                    <tr>
+                        <th colspan="20" style="text-align: left; border: #000 solid 1.5px; padding: 10px; text-transform: uppercase">
+                            STAFF NAME: {{ get_logged_staff_name($payments[0]->updated_by_id) }}
+                        </th>
+                    </tr>
+                    @foreach ($payments as $key => $payment)
+                        @php
+                            $total += ($payment->total_amount + getDiscount($payment->transaction_id));
+                            $total_discount += getDiscount($payment->transaction_id);
+                            $total_sales += $payment->total_amount;
+                            $total_amount += $payment->amount_paid;
+                            $total_balance += $payment->balance;
+
+                            $u_total += ($payment->total_amount + getDiscount($payment->transaction_id));
+                            $u_total_discount += getDiscount($payment->transaction_id);
+                            $u_total_sales += $payment->total_amount;
+                            $u_total_amount += $payment->amount_paid;
+                            $u_total_balance += $payment->balance;
+                        @endphp
+
+                        <tr class="align-middle">
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $payment->invoice_no }}</td>
+                            {{--                            <td>{{ $payment->receipt_no }}</td>--}}
+                            <td>{{ getCustomerName($payment->transaction_id) }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ number_format(getDiscount($payment->transaction_id), 2) }}</td>
+                            <td>{{ $payment->total_amount }}</td>
+                            <td>{{ $payment->amount_paid }}</td>
+                            <td>{{ $payment->balance }}</td>
+                            <td>{{ get_division_name($payment->payment_method) }}</td>
+                            <td>{{ get_division_name($payment->division) }}</td>
+                            <td>{{ $payment->payment_date }}</td>
+                        </tr>
+                        @foreach(\App\Models\TransactionDetail::where('transaction_id', $payment->transaction_id)->get() as $i => $product)
+                            <tr class="align-middle">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ get_product_name($product->product_id) }}</td>
+                                <td>{{ $product->quantity }}</td>
+                                <td>{{ number_format($product->unit_price, 2) }}</td>
+                                <td>{{ number_format(0, 2) }}</td>
+                                <td>{{ number_format($product->amount, 2) }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ get_division_name($payment->division) }}</td>
+                                <td>{{ $payment->payment_date }}</td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                    <tr style="border: #000 solid 1.5px">
+                        <th colspan="5" style="text-align: center">TOTAL</th>
+                        <th></th>
+{{--                        <th>{{ number_format($u_total, 2) }}</th>--}}
+                        <th>{{ number_format($u_total_discount, 2) }}</th>
+                        <th>{{ number_format($u_total_sales, 2) }}</th>
+                        <th>{{ number_format($u_total_amount, 2) }}</th>
+                        <th>{{ number_format($u_total_balance, 2) }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="20"><br></th>
+                    </tr>
+                @endforeach
+                <tr>
+                    <th colspan="20"><br></th>
+                </tr>
+                <tr>
+                    <th colspan="5" style="text-align: center">GRAND TOTAL</th>
+                    <th></th>
+{{--                    <th>{{ number_format($total, 2) }}</th>--}}
+                    <th>{{ number_format($total_discount, 2) }}</th>
+                    <th>{{ number_format($total_sales, 2) }}</th>
+                    <th>{{ number_format($total_amount, 2) }}</th>
+                    <th>{{ number_format($total_balance, 2) }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        @break
+
+    @case ('Product Export Report')
+        <div class = "data">
+            <table class="table border-secondary table-sm mt-2">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
+                        <th>Stock</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $total = 0; ?>
+                    @foreach ($products as $key => $payment)
+                        <tr class="align-middle">
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $payment->name }}</td>
+                            <td>{{ $payment->description }}</td>
+                            <td>{{ get_logged_user_division($payment->type) }}</td>
+                            <td>{{ get_product_sub_category_name($payment->sub_category) }}</td>
+                            <td>{{ $payment->stock_in }}</td>
+                            <td>{{ number_format($payment->price, 2) }}</td>
+                            <td>{{ number_format($payment->stock_in * $payment->price, 2) }}</td>
+                        </tr>
+                        <?php $total += $payment->stock_in * $payment->price; ?>
+                    @endforeach
+                    <tr>
+                        <th colspan="20"><br></th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" style="text-align: center">TOTAL</th>
+                        <th>{{ number_format($total, 2) }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @break
+
+    @case ('Product Report')
+        <div class = "data">
+            <table class="table border-secondary table-sm mt-2">
+                <thead>
+                    <tr>
+                        <th colspan="10"><h4>Product Detail</h4></th>
+                    </tr>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="align-middle">
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->description }}</td>
+                        <td>{{ get_logged_user_division($product->type) }}</td>
+                        <td>{{ $product->stock_in }}</td>
+                        <td>{{ number_format($product->price, 2) }}</td>
+                        <td>{{ number_format($product->stock_in * $product->price, 2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class = "data">
+            <table class="table border-secondary table-sm mt-2">
+                <thead>
+                    <tr>
+                        <th colspan="10"><h4>Restock Detail</h4></th>
+                    </tr>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Old Quantity</th>
+                        <th>Old Stock</th>
+                        <th>Sold</th>
+                        <th>New Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($restock as $product)
+                        <tr class="align-middle">
+                            <td>{{ get_product_name($product->product_id) }}</td>
+                            <td>{{ $product->old_quantity }}</td>
+                            <td>{{ $product->old_stock }}</td>
+                            <td>{{ $product->old_sold }}</td>
+                            <td>{{ $product->new_quantity }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class = "data">
+            <table class="table border-secondary table-sm mt-2">
+                <thead>
+                    <tr>
+                        <th colspan="13"><h4>Sales Detail</h4></th>
+                    </tr>
+                    <tr>
+                        <th>No.</th>
+                        <th>Invoice No</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                        <th>Paid</th>
+                        <th>Balance</th>
+                        <th>Payment <br> Method</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $total = 0;
+                        $total_discount = 0;
+                        $total_sales = 0;
+                        $total_balance = 0;
+                        $total_amount = 0;
+                    @endphp
+    {{--                @foreach($users as $payments)--}}
+    {{--                    @php--}}
+    {{--                        $u_total = 0;--}}
+    {{--                        $u_total_discount = 0;--}}
+    {{--                        $u_total_sales = 0;--}}
+    {{--                        $u_total_balance = 0;--}}
+    {{--                        $u_total_amount = 0;--}}
+    {{--                    @endphp--}}
+    {{--                    <tr>--}}
+    {{--                        <th colspan="20" style="text-align: left; border: #000 solid 1.5px; padding: 10px; text-transform: uppercase">--}}
+    {{--                            STAFF NAME: {{ get_logged_staff_name($payments[0]->updated_by_id) }}--}}
+    {{--                        </th>--}}
+    {{--                    </tr>--}}
+                        @foreach ($payments as $key => $payment)
+                            @php
+                                $total += ($payment->total_amount + getDiscount($payment->transaction_id));
+                                $total_discount += getDiscount($payment->transaction_id);
+                                $total_sales += $payment->total_amount;
+                                $total_amount += $payment->amount_paid;
+                                $total_balance += $payment->balance;
+
+    //                            $u_total += ($payment->total_amount + getDiscount($payment->transaction_id));
+    //                            $u_total_discount += getDiscount($payment->transaction_id);
+    //                            $u_total_sales += $payment->total_amount;
+    //                            $u_total_amount += $payment->amount_paid;
+    //                            $u_total_balance += $payment->balance;
+                            @endphp
+
+    {{--                        <tr class="align-middle">--}}
+    {{--                            <td>{{ ++$key }}</td>--}}
+    {{--                            <td>{{ $payment->invoice_no }}</td>--}}
+    {{--                            --}}{{--                            <td>{{ $payment->receipt_no }}</td>--}}
+    {{--                            <td>{{ getCustomerName($payment->transaction_id) }}</td>--}}
+    {{--                            <td></td>--}}
+    {{--                            <td></td>--}}
+    {{--                            <td></td>--}}
+    {{--                            <td>{{ $payment->total_amount }}</td>--}}
+    {{--                            <td>{{ $payment->amount_paid }}</td>--}}
+    {{--                            <td>{{ $payment->balance }}</td>--}}
+    {{--                            <td>{{ get_division_name($payment->payment_method) }}</td>--}}
+    {{--                            <td>{{ get_division_name($payment->division) }}</td>--}}
+    {{--                            <td>{{ $payment->payment_date }}</td>--}}
+    {{--                        </tr>--}}
+                            @foreach(\App\Models\TransactionDetail::where('transaction_id', $payment->transaction_id)->get() as $i => $product)
+                                <tr class="align-middle">
+                                    <td>{{ ++$key }}</td>
+                                    <td>{{ $payment->invoice_no }}</td>
+                                    <td>{{ getCustomerName($payment->transaction_id) }}</td>
+                                    <td>{{ get_product_name($product->product_id) }}</td>
+                                    <td>{{ $product->quantity }}</td>
+                                    <td>{{ number_format($product->unit_price, 2) }}</td>
+                                    <td>{{ number_format($product->amount, 2) }}</td>
+                                    <td>{{ $payment->amount_paid }}</td>
+                                    <td>{{ $payment->balance }}</td>
+                                    <td>{{ get_division_name($payment->payment_method) }}</td>
+                                    <td>{{ $payment->payment_date }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+    {{--                    <tr style="border: #000 solid 1.5px">--}}
+    {{--                        <th colspan="5" style="text-align: center">TOTAL</th>--}}
+    {{--                        <th></th>--}}
+    {{--                        --}}{{--                        <th>{{ number_format($u_total, 2) }}</th>--}}
+    {{--                        <th>{{ number_format($u_total_discount, 2) }}</th>--}}
+    {{--                        <th>{{ number_format($u_total_sales, 2) }}</th>--}}
+    {{--                        <th>{{ number_format($u_total_amount, 2) }}</th>--}}
+    {{--                        <th>{{ number_format($u_total_balance, 2) }}</th>--}}
+    {{--                        <th></th>--}}
+    {{--                        <th></th>--}}
+    {{--                        <th></th>--}}
+    {{--                    </tr>--}}
+    {{--                    <tr>--}}
+    {{--                        <th colspan="20"><br></th>--}}
+    {{--                    </tr>--}}
+    {{--                @endforeach--}}
+{{--                    <tr>--}}
+{{--                        <th colspan="20"><br></th>--}}
+{{--                    </tr>--}}
+{{--                    <tr>--}}
+{{--                        <th colspan="4" style="text-align: center">GRAND TOTAL</th>--}}
+{{--                        <th></th>--}}
+{{--                        --}}{{--                    <th>{{ number_format($total, 2) }}</th>--}}
+{{--                        <th>{{ number_format($total_discount, 2) }}</th>--}}
+{{--                        <th>{{ number_format($total_sales, 2) }}</th>--}}
+{{--                        <th>{{ number_format($total_amount, 2) }}</th>--}}
+{{--                        <th>{{ number_format($total_balance, 2) }}</th>--}}
+{{--                        <th></th>--}}
+{{--                        <th></th>--}}
+{{--                        <th></th>--}}
+{{--                    </tr>--}}
                 </tbody>
             </table>
         </div>

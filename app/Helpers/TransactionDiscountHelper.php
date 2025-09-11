@@ -16,9 +16,11 @@ class TransactionDiscountHelper {
                 $gehl = ($discounted_amount * (getTaxValue('gehl') / 100));
                 $covid19 = ($discounted_amount * (getTaxValue('covid19') / 100));
 
-                $sub_total = $discounted_amount + $nhil + $gehl + $covid19;
+                $sub_total = $discounted_amount;
 
                 $vat = ($sub_total * (getTaxValue('vat') / 100));
+
+                $tax = $vat + $nhil + $gehl + $covid19;
 
                 $transaction->update([
                     'without_tax_amount' => $discounted_amount,
@@ -27,7 +29,7 @@ class TransactionDiscountHelper {
                     'gehl' => ($transaction->taxable == 1) ? $gehl : 0,
                     'covid19' => ($transaction->taxable == 1) ? $covid19 : 0,
                     'vat' => ($transaction->taxable == 1) ? $vat : 0,
-                    'transaction_amount' => (($transaction->taxable == 1) ? $sub_total + $vat : $sub_total),
+                    'transaction_amount' => (($transaction->taxable == 1) ? $sub_total + $tax : $sub_total),
                     'discount' => $transaction->discount,
                 ]);
             }

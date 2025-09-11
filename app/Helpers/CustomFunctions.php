@@ -2,6 +2,7 @@
 
 use App\Enums\RolesEnum;
 use App\Models\Customer;
+use App\Models\Products;
 use App\Models\ProductSubCategory;
 use App\Models\Setups;
 use App\Models\SystemLOV;
@@ -308,6 +309,30 @@ if(!function_exists("getDiscount")){
             return $record->discount;
         }
         return 0;
+    }
+}
+
+if(!function_exists("get_product_name")){
+    function get_product_name($product_id): null | string
+    {
+        $record = Products::find($product_id);
+
+        if($record){
+            return $record->name;
+        }
+        return null;
+    }
+}
+
+if(!function_exists("get_product_sub_category_name")){
+    function get_product_sub_category_name($id): null | string
+    {
+        $record = ProductSubCategory::find($id);
+
+        if($record){
+            return $record->name;
+        }
+        return null;
     }
 }
 

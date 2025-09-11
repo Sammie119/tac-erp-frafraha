@@ -72,7 +72,7 @@
 
                 @if(use_roles_sidebar(RolesEnum::TRANSACTIONSMANAGER))
                     <x-main-menu-item
-                        :menu_open="['transactions', 'payments', 'transaction_reports', 'waybills', 'sales_banking']"
+                        :menu_open="['transactions', 'payments', 'transaction_reports', 'waybills', 'sales_banking', 'returned_products']"
                         :icon="'cash'"
                         :title="'Transactions'"
                     >
@@ -88,6 +88,9 @@
                             @endcan
                             @can(\App\Enums\PermissionsEnum::CREATESALESBANKING->value)
                                 <x-menu-item :route="'sales_banking'">Sales Banking</x-menu-item>
+                            @endcan
+                            @if(get_logged_user_division_id() === 42  || get_logged_user_division_parent_id() == 42)
+                                <x-menu-item :route="'returned_products'">Returned Products</x-menu-item>
                             @endcan
                             @can(\App\Enums\PermissionsEnum::VIEWTRANSACTIONREPORT->value)
                                 <x-menu-item :route="'transaction_reports'">Transaction Report</x-menu-item>
@@ -134,13 +137,14 @@
 
                 @if(use_roles_sidebar(RolesEnum::STORESMANAGER))
                     <x-main-menu-item
-                        :menu_open="['purchase_orders', 'financial_periods']"
+                        :menu_open="['purchase_orders', 'financial_periods', 'receivables']"
                         :icon="'house'"
                         :title="'Stores'"
                     >
                         <ul class="nav nav-treeview">
                             @can(\App\Enums\PermissionsEnum::PURCHASEORDER->value)
                                 <x-menu-item :route="'purchase_orders'">Purchase Order</x-menu-item>
+                                <x-menu-item :route="'receivables'">Receivables</x-menu-item>
                                 <x-menu-item :route="'financial_periods'">Financial Periods</x-menu-item>
                             @endcan
                         </ul>

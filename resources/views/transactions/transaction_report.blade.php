@@ -16,10 +16,10 @@
 
                     <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->
                         <x-card-button
-                            modal_title="Daily Income Report"
+                            modal_title="Income Report"
                             modal_url="form_report/dailyIncome"
                             modal_size=""
-                            button_title="Daily Income Report"
+                            button_title="Income Report"
                             button_description="Transactions Report"
                             button_color="text-bg-primary"
                         >
@@ -29,10 +29,10 @@
 
                     <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->
                         <x-card-button
-                            modal_title="Receipt Report"
+                            modal_title="Detailed Report"
                             modal_url="form_report/invoiceReport"
                             modal_size=""
-                            button_title="Receipt Report"
+                            button_title="Detailed Report"
                             button_description="Transactions Report"
                             button_color="text-bg-success"
                         >
@@ -48,6 +48,19 @@
                             button_title="Product Report"
                             button_description="Transactions Report"
                             button_color="text-bg-info"
+                        >
+                            <i class="bi bi-bar-chart"></i>
+                        </x-card-button>
+                    </div>
+
+                    <div class="col-lg-4 col-6"> <!--begin::Small Box Widget 1-->
+                        <x-card-button
+                            modal_title="Product Export"
+                            modal_url="form_report/productExport"
+                            modal_size=""
+                            button_title="Product Export"
+                            button_description="Transactions Report"
+                            button_color="text-bg-warning"
                         >
                             <i class="bi bi-bar-chart"></i>
                         </x-card-button>

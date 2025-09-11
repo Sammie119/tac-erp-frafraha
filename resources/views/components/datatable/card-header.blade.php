@@ -1,4 +1,4 @@
-@props(['title' => '', 'icon' => '', 'export_url' => ''])
+@props(['title' => '', 'icon' => '', 'export_url' => '#'])
 
 @php
 
