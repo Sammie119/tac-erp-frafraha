@@ -463,7 +463,7 @@
                         <th colspan="20"><br></th>
                     </tr>
                     <tr>
-                        <th colspan="6" style="text-align: center">TOTAL</th>
+                        <th colspan="7" style="text-align: center">TOTAL</th>
                         <th>{{ number_format($total, 2) }}</th>
                     </tr>
                 </tbody>
