@@ -13,7 +13,7 @@ class StoresTransferController extends Controller
     public function index()
     {
         if(get_logged_in_user_id() === 1){
-            $data['transfers'] = StoresTransfer::orderByDesc('store_transfer_id')->groupBy('store_transfer_id')->get();//paginate(30);
+            $data['transfers'] = StoresTransfer::orderByDesc('store_transfer_id')->groupBy('store_transfer_id', 'id')->get();//paginate(30);
         } else {
             $data['transfers'] = StoresTransfer::distinct('store_transfer_id')->where('division', get_logged_user_division_id())->orderByDesc('store_transfer_id')
                 ->groupBy('store_transfer_id', 'id')->get();//paginate(30);

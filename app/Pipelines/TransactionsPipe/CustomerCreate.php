@@ -23,6 +23,20 @@ class CustomerCreate
             ]);
         } else {
             $cus = Customer::where('name', $transaction['customer'])->first();
+            if($cus === null){
+                $cus = Customer::firstOrCreate(
+                    [
+                        'phone' => '0000000000',
+                        'division' => get_logged_user_division_id(),
+                    ],[
+                    'name' => $transaction['customer'],
+                    'address' => 'Address',
+                    'email' => 'example@gmail.com',
+                    'location' => 'location',
+                    'created_by_id' => get_logged_in_user_id(),
+                    'updated_by_id' => get_logged_in_user_id(),
+                ]);
+            }
         }
 
         $transaction['customer'] = $cus;
