@@ -36,7 +36,7 @@
                             <label for="position" class="form-label mb-2">{{ __('Payment Method') }}</label>
                             <x-input-select :options="$payment_methods" :selected="isset($payment) ? $payment->payment_method : 30" name="payment_method" required />
                         </div>
-                        <div class="form-check col-md-4">c
+                        <div class="form-check col-md-4">
                             <div class="mt-4">
                                 <label class="form-check-label" for="non_taxable">Invoice</label>
                                 <input class="form-check-input" type="checkbox" name="checkbox" value="1" id="non_taxable">

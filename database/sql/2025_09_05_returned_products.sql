@@ -17,12 +17,10 @@ CREATE TABLE IF NOT EXISTS public.returned_products
 (
     id bigint NOT NULL DEFAULT nextval('returned_id_seq'::regclass),
     invoice_no character varying(20) COLLATE pg_catalog."default",
-    product_id bigint NOT NULL,
     transaction_id bigint NOT NULL,
     returned_date date NOT NULL,
-    quantity integer NOT NULL,
-    unit_price decimal(10, 2) NOT NULL,
     amount decimal(10, 2) NOT NULL,
+    transaction_amount decimal(10, 2) NOT NULL,
     reason text NOT NULL,
     division bigint NOT NULL,
     created_by_id bigint NOT NULL,
@@ -55,3 +53,15 @@ ALTER SEQUENCE public.returned_id_seq
 
 ALTER SEQUENCE public.returned_id_seq
     OWNER TO postgres;
+
+
+
+ALTER TABLE IF EXISTS public.returned_products DROP COLUMN IF EXISTS product_id;
+
+ALTER TABLE IF EXISTS public.returned_products DROP COLUMN IF EXISTS quantity;
+
+ALTER TABLE IF EXISTS public.returned_products
+    RENAME unit_price TO transaction_amount;
+
+ALTER TABLE IF EXISTS public.returned_products
+    RENAME amount TO amount_paid;

@@ -28,12 +28,9 @@
                         <x-datatable.datatable :checkData="$checkData" :headers="[
                             ['name' => '#', 'width' => '5%'],
                             'Invoice No.',
-                            'Product Name',
                             'Reason',
                             'Date',
-                            ['name' => 'Quantity', 'nowrap' => 'nowrap', 'width' => '9%'],
-                            ['name' => 'Rate', 'nowrap' => 'nowrap', 'width' => '9%'],
-                            ['name' => 'Amount', 'nowrap' => 'nowrap', 'width' => '9%'],
+                            ['name' => 'Amount Paid', 'nowrap' => 'nowrap', 'width' => '9%'],
                             ['name' => 'Action', 'width' => '5%', 'classes' => 'no-sort']
                         ]">
 
@@ -41,12 +38,9 @@
                                 <tr class="align-middle">
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $product->invoice_no}}</td>
-                                    <td>{{ get_product_name($product->product_id) }}</td>
                                     <td>{{ $product->reason }}</td>
                                     <td>{{ $product->returned_date }}</td>
-                                    <td>{{ $product->quantity }}</td>
-                                    <td>{{ $product->unit_price }}</td>
-                                    <td>{{ $product->amount }}</td>
+                                    <td>{{ $product->amount_paid }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title="Confirm Returned Product Deletion" data-bs-url="form_delete/deleteReturnedProduct/{{ $product->id }}" data-bs-size="" style="padding-top: 8px; padding-bottom: 8px;"> <i class="bi bi-trash"></i></button>
                                     </td>

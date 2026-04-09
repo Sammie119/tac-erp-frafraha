@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\TransactionDetail;
 use App\Models\TransactionPayment;
 use App\Models\VWTransactions;
 use Illuminate\Http\Request;
@@ -74,6 +75,19 @@ class GetAjaxCallController extends Controller
 //        dd($sum_sales);
 
         return response()->json($sum_sales);
+    }
+
+    public function getReturningProducts(Request $request)
+    {
+        $transaction = VWTransactions::where('invoice_no', $request->invoice)->first();
+        $products = TransactionDetail::where('transaction_id', $transaction->transaction_id)->with('product_name')->get();
+
+        if($products){
+            return response()->json($products);
+        }
+
+        return 'No_data';
+
     }
 
 }
