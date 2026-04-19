@@ -6,6 +6,7 @@ use App\Models\Products;
 use App\Models\ReturnedProduct;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
+use App\Models\TransactionPayment;
 use App\Models\VWTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,7 @@ class ReturnedProductController extends Controller
 
         Transaction::where('transaction_id', $transaction->transaction_id)->delete();
         TransactionDetail::where('transaction_id', $transaction->transaction_id)->delete();
+        TransactionPayment::where('transaction_id', $transaction->transaction_id)->delete();
 
         return redirect(route('returned_products', absolute: false))->with('success', 'Requisition Created Successfully!!');
     }
